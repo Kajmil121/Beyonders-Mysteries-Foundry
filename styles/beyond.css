@@ -1,0 +1,4446 @@
+
+/* ============================================
+   1. FONTS
+============================================ */
+
+@font-face {
+    font-family: "BeyondFancy";
+    src: url("../fonts/CormorantGaramond-VariableFont_wght.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BeyondFancyItal";
+    src: url("../fonts/CormorantGaramond-Italic-VariableFont_wght.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "BeyondBase";
+    src: url("../fonts/PTSerif-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BeyondBaseBold";
+    src: url("../fonts/PTSerif-Bold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "BeyondBaseItal";
+    src: url("../fonts/PTSerif-Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: bold;
+}
+
+
+/* ============================================
+   2. GLOBAL VARIABLES
+============================================ */
+
+:root {
+    /* Primary Palette */
+    --color-border: #c3a067;
+    --color-primary: #c3a067;
+    --color-sheet-background: #0d0c1175;
+    --color-background: #1b1a21;
+    --color-dot-filled: #a0896f;
+    --color-dot-empty: #0e0d1200;
+
+    /* Text Colors */
+    --color-text: #ece3d3;
+
+    /* Interface Colors */
+    --color-control-background: #25232c;
+    --color-control-border: #806c4d;
+    --color-focus-glow: #c3a06780;
+
+    /* Damage Colors */
+    --color-damage-bashing: #d58836c0;
+    --color-damage-bashing-border: #975E20c0;
+    --color-damage-lethal: #9E0E0Ec0;
+    --color-damage-lethal-border: #4B0707c0;
+    --color-damage-aggravated: #1C3144c0;
+    --color-damage-aggravated-border: #060A0Ec0;
+
+    /* Warning Colors */
+    --color-danger: #d6483f;
+
+    /* Utility */
+    --color-transparent: transparent;
+}
+
+
+/* ============================================
+   3. GLOBAL TYPOGRAPHY
+============================================ */
+
+h1,
+h2,
+h3 {
+    font-family: "BeyondFancy";
+    color: #ece3d3;
+}
+
+/* Beyonder Sheet */
+
+.beyonder-sheet {
+    font-family: "BeyondBase";
+    color: #ece3d3;
+}
+
+/* Attribute Names */
+
+.beyonder-sheet .attribute-cat label {
+    text-transform: capitalize;
+}
+
+/* Attribute Categories */
+
+.beyonder-sheet .attribute-main h3,
+.beyonder-sheet .ability-category h3 {
+    text-transform: capitalize;
+}
+
+
+/* ============================================
+   4. GENERAL SHEET LAYOUT AND SCROLLBARS
+============================================ */
+
+/* Main Sheet */
+
+.beyonder-sheet {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 850px;
+    height: 100%;
+    min-height: 0;
+    padding: 20px 10px 10px;
+    overflow: hidden;
+    color: #ece3d3;
+    background-color: #0d0c1175;
+}
+
+/* Fixed Header and Navigation */
+
+.beyonder-sheet .identity,
+.beyonder-sheet .fields {
+    flex-shrink: 0;
+}
+
+/* Scrollable Pages */
+
+.beyonder-sheet .sheet-pages {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.beyonder-sheet .sheet-page {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #c3a067 transparent;
+}
+
+.beyonder-sheet .sheet-page[hidden] {
+    display: none;
+}
+
+/* Scrollbar */
+
+.beyonder-sheet .sheet-page::-webkit-scrollbar {
+    width: 8px;
+}
+
+.beyonder-sheet .sheet-page::-webkit-scrollbar-track {
+    background: #1b1a21;
+    border-radius: 4px;
+}
+
+.beyonder-sheet .sheet-page::-webkit-scrollbar-thumb {
+    background: #c3a067;
+    border: 2px solid #1b1a21;
+    border-radius: 4px;
+}
+
+.beyonder-sheet .sheet-page::-webkit-scrollbar-thumb:hover {
+    background: #c3a067;
+}
+
+
+/* ============================================
+   5. IDENTITY HEADER
+============================================ */
+
+/* Main Identity Container */
+
+.beyonder-sheet .identity {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 10px;
+    border: 1px solid #c3a067;
+    padding: 6px;
+    background-color: #1b1a21;
+}
+
+/* Character Portrait */
+
+.beyonder-sheet .character-portrait {
+    flex: 0 0 140px;
+    width: 140px;
+    height: 140px;
+    min-width: 140px;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    border: 1px solid #c3a067;
+    padding: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 28px;
+    margin-right: -5px;
+}
+
+.beyonder-sheet .character-portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Identity Content */
+
+.beyonder-sheet .identity-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    padding-top: 28px;
+}
+
+/* Header Title */
+
+.beyonder-sheet .identity-content h1 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    width: fit-content;
+    max-width: calc(100% - 24px);
+    margin: 0;
+    padding: 0 12px;
+    background: #1b1a21;
+    border: 1px solid #c3a067;
+    color: #c3a067;
+    text-align: center;
+    font-size: 28px;
+}
+
+/* Identity Rows */
+
+.beyonder-sheet .identity-row {
+    display: grid;
+    gap: 10px;
+    align-items: end;
+    width: 100%;
+    min-width: 0;
+}
+
+.beyonder-sheet .identity-row:has(.character-name) {
+    grid-template-columns: 1fr 0.75fr 0.5fr;
+}
+
+.beyonder-sheet .identity-row:has(.pathway) {
+    grid-template-columns: 1fr 0.5fr 2fr 0.75fr;
+}
+
+.beyonder-sheet .identity-row:has(.organization) {
+    grid-template-columns: 0.75fr 2fr 0.5fr;
+}
+
+/* Identity Labels */
+
+.beyonder-sheet .identity-row label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+/* Identity Inputs */
+
+.beyonder-sheet .identity-row input {
+    width: 100%;
+    min-width: 0;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+/* Honorific Name */
+
+.beyonder-sheet .honorific {
+    position: relative;
+    align-self: stretch;
+    z-index: 2;
+}
+
+.beyonder-sheet .honorific textarea {
+    width: 100%;
+    min-width: 0;
+    height: 30px;
+    min-height: 30px;
+    box-sizing: border-box;
+    resize: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.beyonder-sheet .honorific textarea:hover,
+.beyonder-sheet .honorific textarea:focus {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    min-height: 120px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    text-overflow: unset;
+    z-index: 10;
+}
+
+
+/* ============================================
+   6. SHEET NAVIGATION
+============================================ */
+
+/* Navigation Container */
+
+.beyonder-sheet .fields {
+    display: flex;
+    gap: 5px;
+    margin: 12px 0;
+    border-bottom: 1px solid #c3a067;
+    padding-bottom: 6px;
+}
+
+/* Navigation Buttons */
+
+.beyonder-sheet .field-tab {
+    flex: 1;
+    padding: 6px 4px;
+    cursor: pointer;
+}
+
+.beyonder-sheet .field-tab.active {
+    border-bottom: 2px solid #c3a067;
+    color: #c3a067;
+}
+
+
+/* ============================================
+   7. SECTION WINDOWS, TITLES AND LOCKS
+============================================ */
+
+/* Shared Window Styling */
+
+.beyonder-sheet .attribute-list,
+.beyonder-sheet .ability-list,
+.beyonder-sheet .background-list,
+.beyonder-sheet .integrity,
+.beyonder-sheet .beyonder-power-list {
+    position: relative;
+    border: 1px solid #c3a067;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #1b1a21;
+}
+
+/* Shared Section Titles */
+
+.beyonder-sheet .attribute-list h2,
+.beyonder-sheet .ability-list h2,
+.beyonder-sheet .background-list h2,
+.beyonder-sheet .integrity h2,
+.beyonder-sheet .beyonder-power-list h2 {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin: -23px auto 15px;
+    padding: 0 12px;
+    background: #1b1a21;
+    border: 1px solid #c3a067;
+    color: #c3a067;
+    text-align: center;
+    font-size: 32px;
+}
+
+/* Lock Position */
+
+.beyonder-sheet .section-lock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* Hide Actual Checkbox */
+
+.beyonder-sheet .section-lock input {
+    display: none;
+}
+
+/* Lock Icon */
+
+.beyonder-sheet .lock-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Disabled Lock */
+
+.beyonder-sheet .section-lock input:disabled + .lock-icon {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Reset Button */
+
+.beyonder-sheet .section-reset {
+    position: absolute;
+    top: 3px;
+    left: 32px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.beyonder-sheet .section-reset img {
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.beyonder-sheet .section-reset:hover {
+    opacity: 0.65;
+}
+
+
+/* ============================================
+   8. CATEGORY HEADERS AND PRIORITY
+============================================ */
+
+/* Category Headers */
+
+.beyonder-sheet .category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.beyonder-sheet .category-header h3 {
+    margin: 0;
+}
+
+/* Priority Circles */
+
+.beyonder-sheet .category-importance {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.beyonder-sheet .category-importance label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Radio Appearance */
+
+.beyonder-sheet .category-importance input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    border: 1px solid #1b1a21;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* P, S, T Letters */
+
+.beyonder-sheet .category-importance label span {
+    position: absolute;
+    font-size: 0;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.beyonder-sheet .category-importance input[value="Primary"] + span::after {
+    content: "P";
+}
+
+.beyonder-sheet .category-importance input[value="Secondary"] + span::after {
+    content: "S";
+}
+
+.beyonder-sheet .category-importance input[value="Tertiary"] + span::after {
+    content: "T";
+}
+
+.beyonder-sheet .category-importance label span::after {
+    font-size: 11px;
+}
+
+/* Selected Priority */
+
+.beyonder-sheet .category-importance input:checked {
+    background: #a0896f;
+    border-color: #c3a067;
+}
+
+.beyonder-sheet .category-importance input:checked + span {
+    color: #1b1a21;
+}
+
+/* Disabled Priority */
+
+.beyonder-sheet .category-importance input:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+/* Keyboard Focus */
+
+.beyonder-sheet .category-importance input:focus-visible {
+    outline: 2px solid #c3a067;
+    outline-offset: 3px;
+}
+
+
+/* ============================================
+   9. ATTRIBUTE AND ABILITY DOTS
+============================================ */
+
+/* Dot Containers */
+
+.beyonder-sheet .attribute-dots,
+.beyonder-sheet .ability-dots {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Dot Labels */
+
+.beyonder-sheet .attribute-dot,
+.beyonder-sheet .ability-dot {
+    display: inline-flex;
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Hide Checkboxes */
+
+.beyonder-sheet .attribute-dot input,
+.beyonder-sheet .ability-dot input {
+    display: none;
+}
+
+/* Empty Dots */
+
+.beyonder-sheet .attribute-dot span,
+.beyonder-sheet .ability-dot span {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border: 2px dashed #a0896f;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Filled Dots */
+
+.beyonder-sheet .attribute-dot input:checked + span,
+.beyonder-sheet .ability-dot input:checked + span {
+    background: #a0896f;
+    border-color: #a0896f;
+}
+
+/* Keyboard Focus */
+
+.beyonder-sheet .attribute-dot input:focus-visible + span,
+.beyonder-sheet .ability-dot input:focus-visible + span {
+    outline: 2px solid #c3a067;
+    outline-offset: 3px;
+}
+
+/* Locked Attribute and Ability Dots */
+
+.beyonder-sheet .attribute-dot.locked,
+.beyonder-sheet .ability-dot.locked {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.beyonder-sheet .attribute-dot.locked span,
+.beyonder-sheet .ability-dot.locked span {
+    border: 2px solid #a0896f;
+    border-radius: 50%;
+    background: #0e0d1200;
+}
+
+/* Creation Cap Marker */
+
+.beyonder-sheet .attribute-dot.creation-cap {
+    position: relative;
+    margin-right: 14px;
+}
+
+.beyonder-sheet .attribute-dot.creation-cap span::after {
+    content: "✦";
+    position: absolute;
+    left: calc(100% + 5px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    line-height: 1;
+    color: #c3a067;
+    pointer-events: none;
+}
+
+/* Dangerous Knowledge Marker */
+
+.dangerous-knowledge {
+    color: #d6483f;
+    margin-left: 3px;
+    display: inline;
+}
+
+
+/* ============================================
+   10. BONUS CONTROLS
+============================================ */
+
+/* Bonus Buttons */
+
+.beyonder-sheet .attribute-bonus-button,
+.beyonder-sheet .ability-bonus-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    min-width: 20px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid #c3a067;
+    border-radius: 3px;
+    background: #1b1a21;
+    color: #c3a067;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.beyonder-sheet .attribute-bonus-button:hover,
+.beyonder-sheet .ability-bonus-button:hover {
+    background: #c3a067;
+    color: #1b1a21;
+}
+
+/* Bonus Inputs */
+
+.beyonder-sheet .attribute-bonus,
+.beyonder-sheet .ability-bonus {
+    width: 30px;
+    min-width: 30px;
+    box-sizing: border-box;
+    padding: 2px;
+    text-align: center;
+}
+
+
+/* ============================================
+   11. ATTRIBUTES
+============================================ */
+
+/* Attribute Columns */
+
+.beyonder-sheet .attribute-main {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    width: 100%;
+    gap: 12px;
+    text-align: left;
+}
+
+.beyonder-sheet .attribute-main h3 {
+    grid-row: 1;
+    color: #ece3d3;
+    margin: 0;
+}
+
+.beyonder-sheet .attribute-cat {
+    display: flex;
+    flex-direction: column;
+    grid-row: 2;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+.beyonder-sheet .attribute-cat label {
+    text-align: left;
+}
+
+.beyonder-sheet .attribute-cat > input {
+    width: 100%;
+}
+
+/* Attribute Controls */
+
+.beyonder-sheet .attribute-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 74px;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+}
+
+.beyonder-sheet .attribute-controls .attribute-dots {
+    margin-bottom: 10px;
+}
+
+/* Attribute Bonus Controls */
+
+.beyonder-sheet .attribute-bonus-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 74px;
+    min-width: 74px;
+    flex-shrink: 0;
+}
+
+/* Clickable Attribute Names */
+
+.beyonder-sheet .attribute-name {
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.beyonder-sheet .attribute-name:hover {
+    color: #c3a067;
+}
+
+
+/* ============================================
+   12. ABILITIES
+============================================ */
+
+/* Ability Columns */
+
+.beyonder-sheet .ability-main {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+}
+
+.beyonder-sheet .ability-category {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+.beyonder-sheet .ability-category h3 {
+    margin: 0;
+}
+
+/* Ability Rows */
+
+.beyonder-sheet .ability-row {
+    width: 100%;
+    min-width: 0;
+}
+
+.beyonder-sheet .ability-controls {
+    display: grid;
+    grid-template-columns: 105px minmax(0, 1fr) 74px;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Ability Names */
+
+.beyonder-sheet .ability-name {
+    white-space: nowrap;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.beyonder-sheet .ability-name:hover {
+    color: #c3a067;
+}
+
+/* Ability Bonus Controls */
+
+.beyonder-sheet .ability-bonus-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 74px;
+    min-width: 74px;
+    flex-shrink: 0;
+}
+
+
+/* ============================================
+   13. BACKGROUNDS
+============================================ */
+
+/* Background Grid */
+
+.beyonder-sheet .background-main {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    justify-content: center;
+    gap: 12px 40px;
+}
+
+/* Background Rows */
+
+.beyonder-sheet .background-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.beyonder-sheet .background-name {
+    white-space: nowrap;
+}
+
+/* Background Controls */
+
+.beyonder-sheet .background-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* Background Dot Groups */
+
+.beyonder-sheet .background-basic-dots,
+.beyonder-sheet .background-legendary-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.beyonder-sheet .background-dot {
+    flex: 0 0 auto;
+}
+
+/* Legendary Dots */
+
+.beyonder-sheet .background-legendary-dot {
+    position: relative;
+}
+
+.beyonder-sheet .background-legendary-dot span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #c3a067;
+    border-radius: 2px;
+    font-size: 13px;
+    line-height: 1;
+    color: #c3a067;
+}
+
+.beyonder-sheet .background-legendary-dot input:checked + span {
+    background: #1b1a21;
+    border-color: #c3a067;
+}
+
+
+/* ============================================
+   14. INTEGRITY DAMAGE TRACK
+============================================ */
+
+/* Integrity Layout */
+
+.beyonder-sheet .integrity {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 18px;
+}
+
+/* Integrity Title */
+
+.beyonder-sheet .integrity h2 {
+    grid-column: 1;
+    grid-row: 1;
+    width: fit-content;
+}
+
+/* Integrity Boxes */
+
+.beyonder-sheet .integrity-boxes {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    max-width: 285px;
+    margin: 0 auto;
+}
+
+.beyonder-sheet .integrity-box {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    border: 1px solid #AF8746c0;
+}
+
+/* Bashing Damage */
+
+.beyonder-sheet .integrity-box.bashing {
+    background-color: #d58836c0;
+    border: 2px solid #975E20c0;
+}
+
+/* Lethal Damage */
+
+.beyonder-sheet .integrity-box.lethal {
+    background-color: #9E0E0Ec0;
+    border: 2px solid #4B0707c0;
+}
+
+/* Aggravated Damage */
+
+.beyonder-sheet .integrity-box.aggravated {
+    background-color: #1C3144c0;
+    border: 2px solid #060A0Ec0;
+}
+
+
+/* ============================================
+   15. INTEGRITY CONDITIONS
+============================================ */
+
+/* Conditions Container */
+
+.beyonder-sheet .integrity-conditions {
+    grid-column: 1;
+    grid-row: 3;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Centered Two-Column List */
+
+.beyonder-sheet .integrity-condition-list {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    justify-content: center;
+    column-gap: 35px;
+    row-gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+/* Individual Conditions */
+
+.beyonder-sheet .integrity-condition {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+/* Second Column: Marker on the Right */
+
+.beyonder-sheet .integrity-condition:nth-child(n+4) {
+    flex-direction: row-reverse;
+}
+
+/* Condition Markers */
+
+.beyonder-sheet .condition-marker {
+    flex: 0 0 17px;
+    width: 17px;
+    height: 17px;
+    box-sizing: border-box;
+    border: 1px solid #c3a067;
+    border-radius: 50%;
+}
+
+.beyonder-sheet .condition-marker.normal {
+    border-color: #c3a067;
+}
+
+.beyonder-sheet .condition-marker.severe {
+    border-color: #d6483f;
+}
+
+/* Active Condition Markers */
+
+.beyonder-sheet .condition-marker.normal.active {
+    background-color: #c3a067;
+}
+
+.beyonder-sheet .condition-marker.severe.active {
+    background-color: #d6483f;
+}
+
+/* Condition Points */
+
+.beyonder-sheet .condition-points {
+    min-width: 15px;
+    font-size: 14px;
+}
+
+/* Condition Names */
+
+.beyonder-sheet .condition-name {
+    font-family: "BeyondFancy";
+    font-size: 18px;
+}
+
+/* Condition Penalties */
+
+.beyonder-sheet .condition-penalty {
+    font-family: "BeyondFancyItal";
+    font-size: 14px;
+    font-style: italic;
+    color: #ece3d3;
+}
+
+
+/* ============================================
+   16. SPIRITUALITY
+============================================ */
+
+/* Spirituality Section */
+
+.beyonder-sheet .spirituality {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #c3a067;
+    background-color: #1b1a21;
+}
+
+/* Section Title */
+
+.beyonder-sheet .spirituality h2 {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin: -23px auto 5px;
+    padding: 0 12px;
+    background: #1b1a21;
+    border: 1px solid #c3a067;
+    color: #c3a067;
+    text-align: center;
+    font-size: 32px;
+}
+
+/* Horizontal Spirituality Track */
+
+.beyonder-sheet .spirituality-track {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 4px 0;
+}
+
+/* Individual Boxes */
+
+.beyonder-sheet .spirituality-box {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    padding: 0;
+    border: 1px solid #c3a067;
+    border-radius: 2px;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Filled Boxes */
+
+.beyonder-sheet .spirituality-box.filled {
+    background: #8963BA;
+    border: 2px solid #613E8E;
+}
+
+/* Hover */
+
+.beyonder-sheet .spirituality-box:not(:disabled):hover {
+    border-color: #ece3d3;
+}
+
+/* Disabled Boxes */
+
+.beyonder-sheet .spirituality-box:disabled {
+    cursor: default;
+    opacity: 0.75;
+}
+
+/* Empty Track */
+
+.beyonder-sheet .spirituality-empty {
+    color: #ece3d3;
+    font-family: "BeyondBaseItal";
+    font-style: italic;
+}
+
+/* Current / Maximum */
+
+.beyonder-sheet .spirituality-count {
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 18px;
+}
+
+
+/* ============================================
+   17. DETERMINATION
+============================================ */
+
+/* Main Determination Panel */
+
+.beyonder-sheet .determination {
+    position: relative;
+    border: 1px solid #c3a067;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #1b1a21;
+}
+
+/* Section Title */
+
+.beyonder-sheet .determination h2 {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin: -23px auto 15px;
+    padding: 0 12px;
+    background: #1b1a21;
+    border: 1px solid #c3a067;
+    color: #c3a067;
+    text-align: center;
+    font-size: 32px;
+}
+
+/* Tracks Container */
+
+.beyonder-sheet .determination-tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Individual Tracks */
+
+.beyonder-sheet .determination-track {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Maximum Label */
+
+.beyonder-sheet .determination-max-label {
+    grid-column: 1;
+    justify-self: end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    font-family: "BeyondBase";
+    font-size: 14px;
+    text-align: right;
+}
+
+/* Maximum Boxes */
+
+.beyonder-sheet .determination-max-boxes {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 3px 2px;
+}
+
+.beyonder-sheet .determination-box.max-box {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    border: 1px solid #AF8746c0;
+    cursor: pointer;
+}
+
+.beyonder-sheet .determination-box.max-box.active {
+    background: #daa23c;
+    border: 2px solid #BC8724;
+}
+
+.beyonder-sheet .determination-box.max-box.penalized {
+    background-color:#1C3144c0;
+    border:2px solid #060A0Ec0;
+}
+
+/* Temporary Label */
+
+.beyonder-sheet .determination-temp-label {
+    grid-column: 1;
+    justify-self: end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    font-family: "BeyondBase";
+    font-size: 14px;
+    text-align: right;
+}
+
+/* Temporary Label Value */
+
+.beyonder-sheet .determination-temp-label span:last-child {
+    color: #c3a067;
+    font-size: 12px;
+}
+
+/* Temporary Boxes */
+
+.beyonder-sheet .determination-temp-boxes {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 3px 2px;
+}
+
+.beyonder-sheet .determination-box.temp-box {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    border: 1px solid #AF8746c0;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.beyonder-sheet .determination-box.temp-box.active {
+    background: #E8C687;
+    border: 2px solid #DAA23C;
+}
+
+.beyonder-sheet .determination-box.temp-box.disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+
+/* ============================================
+   18. DICE ROLL DIALOG: GENERAL LAYOUT
+============================================ */
+
+/* Dialog Pool Equation */
+
+.beyond-roll-dialog .beyond-roll-pool-equation {
+    display: grid;
+    grid-template-columns:
+        minmax(65px, 1fr) 18px
+        minmax(65px, 1fr) 18px
+        minmax(65px, 1fr) 18px
+        minmax(65px, 1fr);
+    align-items: end;
+    gap: 5px;
+    width: 100%;
+}
+
+/* Individual Pool Boxes */
+
+.beyond-roll-dialog .beyond-roll-pool-part {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.beyond-roll-dialog .beyond-roll-pool-part label {
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 16px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Number Boxes and Situational Input */
+
+.beyond-roll-dialog .beyond-roll-number,
+.beyond-roll-dialog .beyond-situational-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 4px;
+    border: 1px solid #806c4d;
+    border-radius: 3px;
+    background: #25232c;
+    color: #ece3d3;
+    text-align: center;
+    font-family: "BeyondBase";
+    font-size: 21px;
+    font-weight: bold;
+}
+
+/* Situational Input */
+
+.beyond-roll-dialog .beyond-situational-input {
+    outline: none;
+}
+
+.beyond-roll-dialog .beyond-situational-input:focus {
+    border-color: #c3a067;
+    box-shadow: 0 0 4px #c3a06780;
+}
+
+/* Total Box */
+
+.beyond-roll-dialog .beyond-roll-total .beyond-roll-number {
+    background: #a0896f;
+    border-color: #c3a067;
+    color: #1b1a21;
+}
+
+/* Equation Operators */
+
+.beyond-roll-dialog .beyond-roll-operator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    color: #c3a067;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.beyond-roll-dialog .beyond-roll-effects {
+    margin: 12px 0;
+    padding: 10px 14px;
+    border-left: 2px solid #c3a067;
+    background: #25232c;
+    color: #ece3d3;
+}
+
+.beyond-roll-dialog .beyond-roll-effects h3 {
+    margin: 0 0 6px;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 17px;
+}
+
+.beyond-roll-dialog .beyond-roll-effects ul {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.beyond-roll-dialog .beyond-roll-effects li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    line-height: 1.35;
+}
+
+.beyond-roll-dialog .beyond-roll-effects li strong {
+    color: #d9b875;
+}
+
+
+/* ============================================
+   19. DICE ROLL DIALOG: DIFFICULTY
+============================================ */
+
+/* Difficulty Section */
+
+.beyond-roll-dialog .beyond-roll-difficulty {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    padding: 0;
+    margin: 8px 0 0;
+}
+
+/* Center Difficulty Heading */
+
+.beyond-roll-dialog .beyond-roll-difficulty > legend {
+    display: table !important;
+    float: none !important;
+    width: auto !important;
+    margin: 0 auto 8px !important;
+    padding: 0 8px;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 20px;
+    text-align: center !important;
+}
+
+/* Difficulty Options */
+
+.beyond-roll-dialog .beyond-difficulty-options {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Difficulty Buttons */
+
+.beyond-roll-dialog .beyond-difficulty-option {
+    position: relative;
+    display: flex;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #806c4d;
+    border-radius: 3px;
+    background: #25232c;
+    color: #ece3d3;
+    cursor: pointer;
+    font-family: "BeyondBase";
+    font-size: 17px;
+}
+
+.beyond-roll-dialog .beyond-difficulty-option > input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Selected Difficulty */
+
+.beyond-roll-dialog .beyond-difficulty-option:has(input[type="radio"]:checked) {
+    background: #a0896f;
+    border-color: #c3a067;
+    color: #1b1a21;
+}
+
+.beyond-roll-dialog .beyond-difficulty-option span {
+    pointer-events: none;
+}
+
+/* Custom Difficulty Box */
+
+.beyond-roll-dialog .beyond-difficulty-custom {
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+}
+
+.beyond-roll-dialog .beyond-difficulty-custom > input[type="radio"] {
+    position: absolute;
+    z-index: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Custom Difficulty Input */
+
+.beyond-roll-dialog .beyond-custom-difficulty {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    text-align: center;
+    font-family: "BeyondBase";
+    font-size: 12px;
+    cursor: text;
+    pointer-events: auto;
+}
+
+.beyond-roll-dialog .beyond-custom-difficulty::placeholder {
+    color: #ece3d3;
+    opacity: 1;
+    font-size: 12px;
+}
+
+.beyond-roll-dialog .beyond-custom-difficulty:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+
+/* ============================================
+   20. ABILITY ROLL DIALOG
+============================================ */
+
+/* Centered Attribute Dropdown */
+
+.beyond-roll-dialog .beyond-roll-attribute-select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    margin: 0 auto 12px;
+}
+
+.beyond-roll-dialog .beyond-roll-attribute-select label {
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 18px;
+    text-align: center;
+}
+
+.beyond-roll-dialog .beyond-roll-attribute-select select {
+    width: 220px;
+    max-width: 100%;
+    height: 36px;
+    border: 1px solid #c3a067;
+    border-radius: 3px;
+    background: #25232c;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    text-align: center;
+    text-align-last: center;
+}
+
+/* Five-Component Ability Equation */
+
+.beyond-roll-dialog .beyond-roll-pool-equation.ability-roll {
+    grid-template-columns:
+        minmax(48px, 1fr) 14px
+        minmax(48px, 1fr) 14px
+        minmax(48px, 1fr) 14px
+        minmax(65px, 1.2fr) 14px
+        minmax(48px, 1fr);
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+/* Smaller Labels for Ability Roll Boxes */
+
+.beyond-roll-dialog .ability-roll .beyond-roll-pool-part label {
+    font-size: 13px;
+}
+
+/* Untrained Ability Label */
+
+.beyond-roll-dialog .beyond-roll-ability {
+    position: relative;
+}
+
+.beyond-roll-dialog .beyond-roll-ability .beyond-roll-untrained {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    display: block;
+    margin: 0;
+    color: #d6483f;
+    font-family: "BeyondBaseItal";
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* ============================================
+   21. ROLL RESOURCE SPEND CONTROLS
+============================================ */
+
+.beyond-roll-dialog .beyond-roll-resource-spends {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 24px 36px;
+    width: 100%;
+    margin: 14px auto 16px;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-spend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 170px;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-spend > label {
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 16px;
+    text-align: center;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-stepper button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #c3a067;
+    border-radius: 3px;
+    background: #25232c;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-stepper button:hover:not(:disabled) {
+    background: #a0896f;
+    color: #1b1a21;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-stepper button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-stepper output {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #806c4d;
+    border-radius: 3px;
+    background: #1b1a21;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 17px;
+    text-align: center;
+}
+
+.beyond-roll-dialog .beyond-roll-resource-spend small {
+    color: #a0896f;
+    font-family: "BeyondBase";
+    font-size: 11px;
+}
+
+
+/* ============================================
+   22. CHAT ROLL CARDS AND BREAKDOWN
+============================================ */
+
+/* Main Roll Card */
+
+.chat-message .beyond-roll-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 8px 0;
+    padding: 12px;
+    border: 1px solid #c3a067;
+    border-radius: 3px;
+    background: #1b1a21;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+}
+
+/* Roll Header */
+
+.chat-message .beyond-roll-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid #c3a067;
+    padding-bottom: 8px;
+}
+
+.chat-message .beyond-roll-header h2 {
+    margin: 0;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 24px;
+}
+
+.chat-message .beyond-roll-difficulty-label {
+    color: #c3a067;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* Pool Breakdown Layout */
+
+.chat-message .beyond-roll-pool-breakdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+
+/* Base Pool and Total Rows */
+
+.chat-message .beyond-roll-breakdown-base,
+.chat-message .beyond-roll-breakdown-total {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.chat-message .beyond-roll-breakdown-base .beyond-roll-stat,
+.chat-message .beyond-roll-breakdown-total .beyond-roll-stat {
+    flex: 1;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+/* Modifier Boxes */
+
+.chat-message .beyond-roll-breakdown-modifiers {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    width: 100%;
+}
+
+.chat-message .beyond-roll-breakdown-modifiers.ability-roll-modifiers {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.chat-message .beyond-roll-breakdown-modifiers .beyond-roll-stat {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* Individual Pool Statistics */
+
+.chat-message .beyond-roll-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 8px 3px;
+    border: 1px solid #806c4d;
+    border-radius: 3px;
+    background: #25232c;
+}
+
+/* Labels */
+
+.chat-message .beyond-roll-stat span {
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 10px;
+    text-align: center;
+}
+
+.chat-message .beyond-roll-breakdown-modifiers .beyond-roll-stat span {
+    line-height: 1.25;
+}
+
+.chat-message .beyond-roll-breakdown-modifiers.ability-roll-modifiers .beyond-roll-stat span {
+    font-size: 10px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+/* Context */
+
+.chat-message .beyond-roll-stat-context {
+    display: inline;
+    font-size: 10px;
+    font-style: italic;
+    white-space: normal;
+}
+
+/* Values */
+
+.chat-message .beyond-roll-stat strong {
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 18px;
+}
+
+/* Total Pool */
+
+.chat-message .beyond-roll-stat.total {
+    border-color: #c3a067;
+    background: #a0896f;
+}
+
+.chat-message .beyond-roll-stat.total span,
+.chat-message .beyond-roll-stat.total strong {
+    color: #1b1a21;
+}
+
+/* Untrained Indicator */
+
+.chat-message .beyond-roll-untrained {
+    display: block;
+    color: #d6483f;
+    font-family: "BeyondBaseItal";
+    font-size: 11px;
+    font-style: italic;
+    text-align: center;
+}
+
+/* Success Display */
+
+.chat-message .beyond-roll-successes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 12px;
+    border: 1px solid #c3a067;
+    background: #25232c;
+}
+
+.chat-message .beyond-roll-successes > span:first-child {
+    color: #c3a067;
+    font-family: "BeyondBase";
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.chat-message .beyond-roll-successes strong {
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 42px;
+    line-height: 1.1;
+}
+
+.chat-message .beyond-roll-successes > span:last-child {
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 12px;
+}
+
+/* Automatic Failure */
+
+.chat-message .beyond-roll-successes.automatic-failure strong {
+    color: #d6483f;
+    font-size: 26px;
+}
+
+/* Success Breakdown */
+
+.chat-message .beyond-roll-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 8px;
+    border-top: 1px solid #806c4d;
+    font-family: "BeyondBase";
+}
+
+.chat-message .beyond-roll-details > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.chat-message .beyond-roll-details strong {
+    color: #c3a067;
+    font-family: "BeyondBase";
+}
+
+
+/* ============================================
+   23. GLOBAL CHAT MESSAGE STYLING
+============================================ */
+
+/* All Chat Messages */
+
+.chat-message {
+    border: 1px solid #c3a067 !important;
+    border-radius: 3px;
+    outline: none !important;
+    box-shadow: none !important;
+    background: #0d0c11 !important;
+    color: #ece3d3 !important;
+    font-family: "BeyondBase";
+}
+
+/* Message Content */
+
+.chat-message .message-content {
+    color: #ece3d3 !important;
+    font-family: "BeyondBase";
+}
+
+/* Message Header */
+
+.chat-message .message-header,
+.chat-message .message-sender {
+    color: #c3a067 !important;
+    font-family: "BeyondFancy";
+}
+
+/* Message Metadata */
+
+.chat-message .message-metadata,
+.chat-message .message-timestamp {
+    color: #ece3d3 !important;
+    font-family: "BeyondBase";
+}
+
+/* Normal Message Text */
+
+.chat-message .message-content p,
+.chat-message .message-content strong,
+.chat-message .message-content em,
+.chat-message .message-content small {
+    color: #ece3d3 !important;
+    font-family: "BeyondBase";
+}
+
+/* Chat Headings */
+
+.chat-message h1,
+.chat-message h2,
+.chat-message h3 {
+    color: #c3a067 !important;
+    font-family: "BeyondFancy";
+}
+
+/* Links */
+
+.chat-message a {
+    color: #c3a067 !important;
+}
+
+.chat-message a:hover {
+    color: #ece3d3 !important;
+}
+
+/* Dice Display */
+
+.chat-message .dice-roll {
+    border: 1px solid #0d0c11;
+    border-radius: 3px;
+    background: #0d0c11;
+    color: #ece3d3;
+    box-shadow: none;
+    font-family: "BeyondBase";
+}
+
+
+/* ============================================
+   24. PATHWAY ITEM SHEET: MAIN LAYOUT
+============================================ */
+
+/* Main Item Sheet */
+
+.pathway-item-sheet {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    padding: 12px 10px 10px;
+    gap: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #c3a067 transparent;
+    background-color: #0d0c1175;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+}
+
+/* Item Sheet Scrollbar */
+
+.pathway-item-sheet::-webkit-scrollbar {
+    width: 8px;
+}
+
+.pathway-item-sheet::-webkit-scrollbar-track {
+    background: #1b1a21;
+    border-radius: 4px;
+}
+
+.pathway-item-sheet::-webkit-scrollbar-thumb {
+    background: #c3a067;
+    border: 2px solid #1b1a21;
+    border-radius: 4px;
+}
+
+.pathway-item-sheet::-webkit-scrollbar-thumb:hover {
+    background: #c3a067;
+}
+
+
+/* ============================================
+   25. PATHWAY HEADER
+============================================ */
+
+/* Compact Header */
+
+.pathway-item-sheet .pathway-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) 145px 30px;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #c3a067;
+    background: #1b1a21;
+}
+
+/* Pathway Image Button */
+
+.pathway-item-sheet .pathway-image-button {
+    position: relative;
+    display: block;
+    width: 76px;
+    height: 76px;
+    min-width: 76px;
+    padding: 3px;
+    overflow: hidden;
+    border: 1px solid #c3a067;
+    border-radius: 0;
+    background: #25232c;
+    cursor: pointer;
+}
+
+/* Pathway Image */
+
+.pathway-item-sheet .pathway-image-preview {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border: none;
+    border-radius: 0;
+}
+
+/* Image Edit Overlay */
+
+.pathway-item-sheet .pathway-image-overlay {
+    position: absolute;
+    inset: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1b1a21cc;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.pathway-item-sheet .pathway-image-button:hover:not(:disabled) .pathway-image-overlay {
+    opacity: 1;
+}
+
+.pathway-item-sheet .pathway-image-button:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+/* Pathway Name Container */
+
+.pathway-item-sheet .pathway-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+}
+
+/* Pathway Name Label */
+
+.pathway-item-sheet .pathway-title label,
+.pathway-item-sheet .pathway-profile label {
+    margin: 0;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 16px;
+}
+
+/* Pathway Name Input */
+
+.pathway-item-sheet .pathway-title input {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    box-sizing: border-box;
+    padding: 3px 7px;
+    border: 1px solid #806c4d;
+    border-radius: 2px;
+    background: #25232c;
+    color: #ece3d3;
+    font-family: "BeyondFancy";
+    font-size: 21px;
+    text-align: center;
+}
+
+.pathway-item-sheet .pathway-title input:focus {
+    border-color: #c3a067;
+    box-shadow: 0 0 4px #c3a06780;
+    outline: none;
+}
+
+
+/* ============================================
+   26. PATHWAY PROFILE
+============================================ */
+
+.pathway-item-sheet .pathway-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+/* Profile Selector */
+
+.pathway-item-sheet .pathway-profile select {
+    width: 100%;
+    height: 34px;
+    box-sizing: border-box;
+    border: 1px solid #806c4d;
+    border-radius: 2px;
+    background: #25232c;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 13px;
+    text-align: center;
+    text-align-last: center;
+}
+
+.pathway-item-sheet .pathway-profile select:focus {
+    border-color: #c3a067;
+    box-shadow: 0 0 4px #c3a06780;
+    outline: none;
+}
+
+.pathway-item-sheet .pathway-authorities-editor {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    margin-top:10px;
+    padding:10px;
+    border:1px solid #806c4d;
+    background:#1b1a21;
+}
+
+.pathway-item-sheet .pathway-authorities-editor label {
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:16px;
+}
+
+.pathway-item-sheet .pathway-authorities-editor textarea {
+    width:100%;
+    box-sizing:border-box;
+    resize:vertical;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#25232c;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+}
+
+.pathway-item-sheet .pathway-authorities-editor textarea:focus {
+    border-color:#c3a067;
+    box-shadow:0 0 4px #c3a06780;
+    outline:none;
+}
+
+@media (max-width:650px) {
+    .pathway-overview {
+        grid-template-columns:1fr;
+    }
+
+    .pathway-overview-icon {
+        width:min(100%,220px);
+        justify-self:center;
+    }
+
+    .pathway-overview-fields {
+        grid-template-columns:1fr;
+    }
+
+    .progression-notes-grid,
+    .progression-tracks {
+        grid-template-columns:1fr;
+    }
+}
+
+
+/* ============================================
+   27. PATHWAY ITEM LOCK
+============================================ */
+
+/* Lock Button */
+
+.pathway-item-sheet .pathway-lock-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.pathway-item-sheet .pathway-lock-toggle:hover {
+    background: transparent;
+    opacity: 0.65;
+}
+
+/* Lock Icon */
+
+.pathway-item-sheet .pathway-lock-toggle img {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: none;
+    object-fit: contain;
+}
+
+/* Lock Keyboard Focus */
+
+.pathway-item-sheet .pathway-lock-toggle:focus-visible {
+    outline: 2px solid #c3a067;
+    outline-offset: 3px;
+}
+
+
+/* ============================================
+   28. PATHWAY SEQUENCES SECTION
+============================================ */
+
+/* Main Sequences Container */
+
+.pathway-item-sheet .pathway-sequences {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #c3a067;
+    background-color: #1b1a21;
+}
+
+/* Sequences Title */
+
+.pathway-item-sheet .pathway-sequences > h2 {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin: -27px auto 8px;
+    padding: 0 12px;
+    border: 1px solid #c3a067;
+    background: #1b1a21;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 32px;
+    text-align: center;
+}
+
+
+/* ============================================
+   29. FOLDABLE SEQUENCES
+============================================ */
+
+/* Individual Sequence: No Border */
+
+.pathway-item-sheet .pathway-sequence {
+    display: block;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+.pathway-item-sheet .pathway-sequence[open] {
+    background: transparent;
+}
+
+/* Sequence Header */
+
+.pathway-item-sheet .pathway-sequence-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 38px;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    border: none;
+    background: #25232c;
+    color: #ece3d3;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    font-family: "BeyondFancy";
+    font-size: 19px;
+}
+
+/* Remove Default Marker */
+
+.pathway-item-sheet .pathway-sequence-summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Custom Folding Marker */
+
+.pathway-item-sheet .pathway-sequence-summary::before {
+    content: "▸";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    flex: 0 0 16px;
+    color: #c3a067;
+    font-family: "BeyondBase";
+    font-size: 16px;
+}
+
+/* Expanded Marker */
+
+.pathway-item-sheet .pathway-sequence[open] > .pathway-sequence-summary::before {
+    content: "▾";
+}
+
+/* Expanded Header */
+
+.pathway-item-sheet .pathway-sequence[open] > .pathway-sequence-summary {
+    background: #1b1a21;
+}
+
+/* Header Hover */
+
+.pathway-item-sheet .pathway-sequence-summary:hover {
+    background: #302d36;
+}
+
+/* Sequence Number */
+
+.pathway-item-sheet .pathway-sequence-number {
+    flex: 0 0 auto;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Sequence Name */
+
+.pathway-item-sheet .pathway-sequence-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: #ece3d3;
+    font-family: "BeyondFancy";
+    font-size: 19px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Sequence Tier */
+
+.pathway-item-sheet .pathway-sequence-tier {
+    flex: 0 0 auto;
+    color: #a0896f;
+    font-family: "BeyondBaseItal";
+    font-size: 13px;
+    font-style: italic;
+    text-align: right;
+}
+
+
+/* ============================================
+   30. SEQUENCE CONTENT
+============================================ */
+
+/* Content Container */
+
+.pathway-item-sheet .pathway-sequence-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 10px 18px;
+    border: none;
+    background: #1b1a21;
+}
+
+/* Sequence Name and Tier Grid */
+
+.pathway-item-sheet .pathway-sequence-details {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+}
+
+/* Sequence Labels */
+
+.pathway-item-sheet .pathway-sequence-details label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 16px;
+}
+
+/* Sequence Inputs */
+
+.pathway-item-sheet .pathway-sequence-details input {
+    width: 100%;
+    min-width: 0;
+    height: 32px;
+    box-sizing: border-box;
+    border: 1px solid #806c4d;
+    border-radius: 2px;
+    background: #25232c;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 14px;
+}
+
+.pathway-item-sheet .pathway-sequence-details input:focus {
+    border-color: #c3a067;
+    box-shadow: 0 0 4px #c3a06780;
+    outline: none;
+}
+
+
+/* ============================================
+   31. ATTRIBUTE ADVANCEMENTS
+============================================ */
+
+/* Advancement Heading */
+
+.pathway-item-sheet .pathway-sequence-content > h4 {
+    width: fit-content;
+    margin: 4px auto 0;
+    padding: 0 10px 5px;
+    border-bottom: 1px solid #c3a067;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 22px;
+    text-align: center;
+}
+
+/* Three Advancement Columns */
+
+.pathway-item-sheet .pathway-advancements {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+/* Individual Categories */
+
+.pathway-item-sheet .pathway-advancement-category {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #806c4d;
+    border-radius: 2px;
+    background: #25232c;
+}
+
+/* Category Headers */
+
+.pathway-item-sheet .pathway-advancement-category h5 {
+    width: fit-content;
+    margin: 0 auto 5px;
+    padding: 0 8px 5px;
+    border-bottom: 1px solid #c3a067;
+    color: #c3a067;
+    font-family: "BeyondFancy";
+    font-size: 19px;
+    text-align: center;
+}
+
+/* Individual Attribute Rows */
+
+.pathway-item-sheet .pathway-advancement-row {
+    display: grid;
+    grid-template-columns: minmax(65px, 1fr) minmax(0, 1.7fr);
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Attribute Name */
+
+.pathway-item-sheet .pathway-advancement-row > span {
+    min-width: 0;
+    color: #ece3d3;
+    font-family: "BeyondBase";
+    font-size: 13px;
+}
+
+/* Levels and Ceiling Container */
+
+.pathway-item-sheet .pathway-advancement-values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    min-width: 0;
+}
+
+/* Levels and Ceiling Labels */
+
+.pathway-item-sheet .pathway-advancement-values label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    color: #a0896f;
+    font-family: "BeyondFancy";
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Advancement Inputs */
+
+.pathway-item-sheet .pathway-advancement-values input {
+    width: 100%;
+    max-width: 48px;
+    height: 27px;
+    box-sizing: border-box;
+    padding: 2px;
+    border: 1px solid #806c4d;
+    border-radius: 2px;
+    background: #1b1a21;
+    color: #ece3d3;
+    text-align: center;
+    font-family: "BeyondBase";
+    font-size: 14px;
+}
+
+/* Input Focus */
+
+.pathway-item-sheet .pathway-advancement-values input:focus {
+    border-color: #c3a067;
+    box-shadow: 0 0 4px #c3a06780;
+    outline: none;
+}
+
+/* Placeholder for Unspecified Ceiling */
+
+.pathway-item-sheet .pathway-advancement-values input::placeholder {
+    color: #806c4d;
+    opacity: 1;
+}
+
+/* ============================================
+   32. BEYONDER POWER ITEM SHEET
+============================================ */
+
+.beyonder-power-editor {
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    box-sizing:border-box;
+    width:100%;
+    height:100%;
+    overflow-y:auto;
+    padding:14px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+}
+
+.beyonder-power-editor label,
+.beyonder-power-editor section {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:0;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:16px;
+}
+
+.beyonder-power-editor input,
+.beyonder-power-editor select,
+.beyonder-power-editor textarea {
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    padding:7px;
+    background:#25232c;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+    font-size:14px;
+}
+
+.beyonder-power-editor input:focus,
+.beyonder-power-editor select:focus,
+.beyonder-power-editor textarea:focus {
+    border-color:#c3a067;
+    box-shadow:0 0 4px #c3a06780;
+    outline:none;
+}
+
+.beyonder-power-header {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.beyonder-power-link-fields {
+    display:grid;
+    grid-template-columns:minmax(0,2fr) minmax(120px,1fr);
+    gap:12px;
+}
+
+.beyonder-power-editor h3 {
+    margin:0;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:22px;
+}
+
+.beyonder-power-editor p,
+.beyonder-power-editor small {
+    margin:0;
+    color:#a0896f;
+    font-family:"BeyondBase";
+    font-size:12px;
+}
+
+.beyonder-power-abilities select {
+    min-height:230px;
+}
+
+.beyonder-power-modifier input {
+    max-width:120px;
+}
+
+.beyonder-power-effects textarea,
+.beyonder-power-description textarea {
+    resize:vertical;
+    min-height:100px;
+}
+
+
+/* ============================================
+   33. BEYONDER POWERS ON ACTOR SHEET
+============================================ */
+
+.beyonder-powers-page {
+    padding:12px;
+}
+
+.pathway-page {
+    padding:12px;
+}
+
+.pathway-overview {
+    display:grid;
+    grid-template-columns:minmax(150px,220px) minmax(0,1fr);
+    align-items:start;
+    gap:18px;
+    padding:16px;
+    border:1px solid #c3a067;
+    background:#1b1a21;
+    color:#ece3d3;
+}
+
+.pathway-overview-icon {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:150px;
+    aspect-ratio:1;
+    overflow:hidden;
+    border:1px solid #806c4d;
+    background:#25232c;
+    color:#a0896f;
+}
+
+.pathway-overview-icon img {
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.pathway-overview-details h2 {
+    margin:0 0 14px;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:28px;
+}
+
+.pathway-overview-fields {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+}
+
+.pathway-overview-field {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    min-width:0;
+    padding:9px;
+    border:1px solid #806c4d;
+    background:#25232c;
+}
+
+.pathway-overview-field > span {
+    color:#a0896f;
+    font-size:12px;
+    text-transform:uppercase;
+}
+
+.pathway-overview-field > strong {
+    color:#ece3d3;
+    font-weight:normal;
+    white-space:pre-wrap;
+}
+
+.pathway-notes-grid {
+    margin-top:12px;
+}
+
+.progression-page {
+    padding:12px;
+}
+
+.progression-dashboard {
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:16px;
+    border:1px solid #c3a067;
+    background:#1b1a21;
+    color:#ece3d3;
+}
+
+.progression-notes-grid,
+.progression-tracks {
+    display:grid;
+    gap:12px;
+}
+
+.progression-notes-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.progression-tracks {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.progression-digestion-field {
+    grid-column:1;
+    grid-row:1 / span 3;
+    align-items:center;
+}
+
+.progression-digestion-heading {
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    width:100%;
+}
+
+.progression-digestion-display {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    width:100%;
+    min-width:0;
+}
+
+.progression-digestion-display > img {
+    display:block;
+    width:min(100%, 220px);
+    max-height:330px;
+    aspect-ratio:2 / 3;
+    object-fit:contain;
+}
+
+.progression-digestion-slider-row {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:min(100%, 280px);
+}
+
+.progression-digestion-slider-row > button {
+    flex:0 0 28px;
+    width:28px;
+    height:28px;
+    padding:0;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.progression-digestion-slider-row > button:hover:not(:disabled) {
+    border-color:#c3a067;
+    color:#c3a067;
+}
+
+.progression-digestion-slider-row > button:disabled {
+    opacity:.4;
+    cursor:default;
+}
+
+.progression-advance-button {
+    width:min(100%, 280px);
+    min-height:32px;
+    padding:5px 12px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#25232c;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:16px;
+    cursor:pointer;
+}
+
+.progression-advance-button:hover:not(:disabled) {
+    border-color:#c3a067;
+    background:#302b32;
+}
+
+.progression-advance-button:disabled {
+    color:#8b8174;
+    opacity:.5;
+    cursor:default;
+}
+
+.progression-digestion-overflow {
+    width:100%;
+    color:#d59b91;
+    text-align:center;
+    cursor:context-menu;
+}
+
+.progression-field .progression-digestion-slider {
+    appearance:none;
+    display:block;
+    flex:1;
+    width:100%;
+    min-width:0;
+    height:20px;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    cursor:pointer;
+}
+
+.progression-digestion-slider::-webkit-slider-runnable-track {
+    height:8px;
+    border:1px solid #806c4d;
+    border-radius:5px;
+    background:linear-gradient(to right, #c3a067 var(--digestion-fill, 0%), #1b1a21 var(--digestion-fill, 0%));
+}
+
+.progression-digestion-slider::-webkit-slider-thumb {
+    appearance:none;
+    width:16px;
+    height:16px;
+    margin-top:-5px;
+    border:1px solid #ece3d3;
+    border-radius:50%;
+    background:#c3a067;
+}
+
+.progression-digestion-slider::-moz-range-track {
+    height:8px;
+    border:1px solid #806c4d;
+    border-radius:5px;
+    background:#1b1a21;
+}
+
+.progression-digestion-slider::-moz-range-progress {
+    height:8px;
+    border-radius:5px;
+    background:#c3a067;
+}
+
+.progression-digestion-slider::-moz-range-thumb {
+    width:14px;
+    height:14px;
+    border:1px solid #ece3d3;
+    border-radius:50%;
+    background:#c3a067;
+}
+
+.progression-digestion-slider:disabled {
+    cursor:default;
+    opacity:.55;
+}
+
+.progression-transgressions-field {
+    grid-column:2;
+    grid-row:1;
+}
+
+.progression-stability-field {
+    grid-column:3;
+    grid-row:1;
+}
+
+.progression-field {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    min-width:0;
+    padding:10px;
+    border:1px solid #806c4d;
+    background:#25232c;
+    color:#c3a067;
+}
+
+.progression-field > span {
+    color:#a0896f;
+    font-size:12px;
+}
+
+.progression-field small,
+.progression-history-empty {
+    color:#a0896f;
+    font-size:12px;
+    line-height:1.4;
+}
+
+.progression-field textarea,
+.progression-field input {
+    box-sizing:border-box;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+}
+
+.progression-field textarea {
+    width:100%;
+    resize:vertical;
+}
+
+.progression-field input {
+    width:100%;
+    padding:5px 7px;
+}
+
+.progression-field progress {
+    width:100%;
+    height:10px;
+    accent-color:#c3a067;
+}
+
+.progression-track-field {
+    gap:10px;
+}
+
+.progression-track-title {
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.progression-track-title > span {
+    color:#a0896f;
+    font-size:12px;
+}
+
+.progression-track-title > strong {
+    color:#ece3d3;
+    font-size:13px;
+    font-weight:normal;
+    text-align:right;
+}
+
+.progression-box-stepper {
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.progression-box-stepper > button {
+    flex:0 0 28px;
+    width:28px;
+    height:28px;
+    padding:0;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.progression-box-stepper > button:hover:not(:disabled) {
+    border-color:#c3a067;
+    color:#c3a067;
+}
+
+.progression-box-stepper > button:disabled {
+    opacity:.4;
+    cursor:default;
+}
+
+.progression-boxes {
+    display:grid;
+    grid-auto-flow:column;
+    grid-auto-columns:minmax(10px,1fr);
+    align-items:center;
+    flex:1;
+    gap:5px;
+    min-width:0;
+}
+
+.progression-box {
+    display:block;
+    width:100%;
+    aspect-ratio:1;
+    border:1px solid #806c4d;
+    background:#1b1a21;
+}
+
+.progression-boxes-square .progression-box.active {
+    border-color:#c34b56;
+    background:#80313c;
+}
+
+.progression-boxes-round .progression-box {
+    border-radius:50%;
+}
+
+.progression-boxes-round .progression-box.active {
+    border-color:#c3a067;
+    background:#c3a067;
+}
+
+.progression-control-display strong {
+    color:#ece3d3;
+    font-size:20px;
+}
+
+.progression-loss-control {
+    position:relative;
+    grid-column:2 / 4;
+    grid-row:3;
+    padding:20px 10px 10px;
+    border:2px solid #806c4d;
+    background:#1b1a21;
+    color:#ece3d3;
+}
+
+.progression-loss-control-steps {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    align-items:end;
+    min-height:126px;
+    padding:8px 0 0;
+    border-bottom:2px solid #806c4d;
+}
+
+.progression-loss-control-step {
+    position:relative;
+    min-width:0;
+    border-top:1px solid #912b43;
+    border-right:1px solid #912b43;
+    background:#241b21;
+}
+
+.progression-loss-control-step:first-child {
+    border-left:1px solid #912b43;
+}
+
+.progression-loss-control-step:nth-child(1) {height:108px;}
+.progression-loss-control-step:nth-child(2) {height:98px;}
+.progression-loss-control-step:nth-child(3) {height:88px;}
+.progression-loss-control-step:nth-child(4) {height:78px;}
+
+.progression-loss-control-step.current {
+    border-top-color:#d84a5e;
+    box-shadow:0 -2px 0 #d84a5e;
+}
+
+.progression-loss-control-label {
+    position:absolute;
+    top:7px;
+    left:7px;
+    right:4px;
+    z-index:2;
+    display:flex;
+    align-items:flex-start;
+    gap:4px;
+    color:#e2d7d4;
+    font-size:clamp(9px,1vw,13px);
+    line-height:1.1;
+}
+
+.progression-loss-control-label strong {
+    flex:1 1 auto;
+    min-width:0;
+    overflow-wrap:anywhere;
+    font-family:"BeyondFancy";
+    font-size:clamp(11px,1.25vw,16px);
+    font-weight:normal;
+}
+
+.progression-loss-control-step:nth-child(3) .progression-loss-control-label strong,
+.progression-loss-control-step:nth-child(4) .progression-loss-control-label strong {
+    color:#df4c4b;
+}
+
+.progression-loss-control-box {
+    display:flex;
+    flex:0 0 22px;
+    align-items:center;
+    justify-content:center;
+    width:22px;
+    height:22px;
+    border:2px solid #ad1e4d;
+    border-radius:4px;
+    padding:0;
+    background:transparent;
+    color:#f0b4aa;
+    font-size:15px;
+    opacity:1;
+    cursor:pointer;
+}
+
+.progression-loss-control-box:hover:not(:disabled) {
+    border-color:#e04a69;
+    background:#461929;
+}
+
+.progression-loss-control-box:disabled {
+    cursor:default;
+    opacity:.55;
+}
+
+.progression-loss-control-step.active .progression-loss-control-box {
+    background:#711d37;
+    color:#fff0e8;
+}
+
+.progression-loss-control-fill {
+    position:absolute;
+    right:0;
+    bottom:0;
+    left:0;
+    height:44%;
+    background:rgba(120,25,46,.18);
+}
+
+.progression-loss-control-step.active .progression-loss-control-fill {
+    background:rgba(160,30,58,.34);
+}
+
+.progression-loss-control > small {
+    display:block;
+    margin-top:8px;
+    color:#d59b91;
+    font-size:12px;
+}
+
+.progression-stability-rolls {
+    display:flex;
+    flex-direction:column;
+    grid-column:2 / 4;
+    grid-row:2;
+    gap:6px;
+    padding:8px;
+    border:1px solid #806c4d;
+    background:#25232c;
+}
+
+.progression-stability-rolls > header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.progression-stability-actions {
+    display:flex;
+    flex:0 0 auto;
+    align-items:center;
+    gap:8px;
+}
+
+.progression-stability-rolls h3 {
+    margin:0;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:18px;
+}
+
+.progression-stability-rolls p {
+    margin:0;
+    color:#a0896f;
+    font-size:11px;
+}
+
+.progression-stability-rolls button {
+    padding:5px 8px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    cursor:pointer;
+}
+
+.progression-stability-rolls button:hover:not(:disabled) {
+    border-color:#c3a067;
+    color:#c3a067;
+}
+
+.progression-stability-rolls .progression-history-link {
+    border-color:transparent;
+    background:transparent;
+    color:#c3a067;
+    text-decoration:underline;
+    text-underline-offset:3px;
+}
+
+.progression-stability-rolls .progression-history-link:hover:not(:disabled) {
+    border-color:transparent;
+    color:#ece3d3;
+}
+
+.progression-stability-history {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin:0;
+    padding-left:22px;
+}
+
+.progression-stability-rolls .progression-stability-history[hidden],
+.progression-stability-rolls .progression-history-empty[hidden] {
+    display:none;
+}
+
+.progression-stability-history li {
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    color:#ece3d3;
+    font-size:12px;
+}
+
+.progression-stability-history li > span {
+    color:#a0896f;
+}
+
+.progression-stability-history li > .passed {
+    color:#9bb58a;
+}
+
+.progression-stability-history li > .failed {
+    color:#d59b91;
+}
+
+.beyond-progression-dialog .stability-roll-setup,
+.beyond-progression-dialog .stability-failure-setup {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+}
+
+.beyond-progression-dialog .stability-roll-setup label,
+.beyond-progression-dialog .stability-failure-setup label {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.beyond-progression-dialog .stability-roll-setup input,
+.beyond-progression-dialog .stability-roll-setup select,
+.beyond-progression-dialog .stability-failure-setup input:not([type="checkbox"]),
+.beyond-progression-dialog .stability-failure-setup select {
+    padding:6px 8px;
+    border:1px solid #806c4d;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+}
+
+.beyond-progression-dialog .stability-failure-options {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.beyond-progression-dialog .stability-failure-option {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 90px;
+    align-items:center;
+    gap:10px;
+}
+
+.beyond-progression-dialog .stability-failure-option.no-modifier {
+    grid-template-columns:minmax(0,1fr);
+}
+
+.beyond-progression-dialog .stability-failure-setup .stability-failure-option-label {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:8px;
+    margin:0;
+}
+
+.beyond-progression-dialog .stability-failure-option-label input[type="checkbox"] {
+    flex:0 0 16px;
+    width:16px;
+    height:16px;
+    margin:0;
+    accent-color:#c3a067;
+}
+
+.beyond-progression-dialog .stability-failure-option > input[type="number"] {
+    width:90px;
+    min-width:0;
+    text-align:center;
+}
+
+.beyond-progression-dialog .stability-roll-setup p,
+.beyond-progression-dialog .stability-failure-setup p {
+    margin:0;
+    color:#a0896f;
+    font-size:12px;
+}
+
+.beyond-progression-dialog .stability-roll-new-trigger {
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:10px;
+}
+
+.beyond-progression-dialog .stability-roll-preview {
+    display:grid;
+    grid-template-columns:1fr auto 1fr auto;
+    align-items:center;
+    gap:8px;
+    padding:8px;
+    border:1px solid #806c4d;
+    background:#25232c;
+}
+
+.beyond-progression-dialog .stability-roll-preview span {
+    color:#a0896f;
+}
+
+.beyond-progression-dialog .stability-roll-preview strong {
+    color:#c3a067;
+}
+
+.beyond-progression-dialog .stability-history-popup {
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    max-height:65vh;
+    overflow:auto;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+}
+
+.beyond-progression-dialog .stability-history-popup h3 {
+    margin:0 0 8px;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+}
+
+.stability-history-categories {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+.stability-history-categories li {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:7px 0;
+    border-bottom:1px solid #4b4039;
+}
+
+.stability-history-categories li.empty {
+    color:#a0896f;
+}
+
+.stability-history-categories button {
+    flex:0 0 auto;
+    padding:4px 8px;
+    border:1px solid #806c4d;
+    background:#1b1a21;
+    color:#d59b91;
+    cursor:pointer;
+}
+
+.stability-history-categories button:hover {
+    border-color:#d59b91;
+}
+
+@media (max-width:650px) {
+    .progression-tracks {
+        grid-template-columns:minmax(0,1fr);
+    }
+
+    .progression-digestion-field,
+    .progression-transgressions-field,
+    .progression-stability-field,
+    .progression-stability-rolls,
+    .progression-loss-control {
+        grid-column:1;
+        grid-row:auto;
+    }
+
+    .progression-box-stepper {
+        gap:5px;
+    }
+
+    .progression-boxes {
+        gap:3px;
+    }
+
+    .progression-stability-rolls > header {
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .progression-stability-actions {
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .beyond-progression-dialog .stability-roll-new-trigger {
+        grid-template-columns:1fr;
+    }
+}
+
+.progression-dashboard {
+    position:relative;
+    margin-top:20px;
+    padding:10px;
+}
+
+.beyonder-sheet .progression-dashboard > .progression-panel-heading,
+.beyonder-sheet .progression-loss-control > .progression-panel-heading {
+    position:relative;
+    z-index:1;
+    width:fit-content;
+    margin:-23px auto 15px;
+    padding:0 12px;
+    border:1px solid #c3a067;
+    background:#1b1a21;
+    color:#c3a067;
+    font-size:32px;
+    text-align:center;
+}
+
+.progression-field {
+    position:relative;
+    margin-top:14px;
+    border-color:#c3a067;
+}
+
+.beyonder-sheet .progression-field > .progression-subsection-heading,
+.beyonder-sheet .progression-stability-rolls > .progression-subsection-heading {
+    position:relative;
+    z-index:1;
+    width:fit-content;
+    max-width:calc(100% - 12px);
+    margin:-22px auto 9px;
+    padding:0 9px;
+    border:1px solid #c3a067;
+    background:#25232c;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:20px;
+    font-weight:normal;
+    line-height:1.2;
+    text-align:center;
+}
+
+.progression-field-state {
+    color:#a0896f;
+    font-size:12px;
+    text-align:center;
+}
+
+.progression-loss-control {
+    margin-top:0;
+    padding:10px;
+    border-color:#c3a067;
+}
+
+.progression-loss-control > .progression-panel-heading {
+    border-radius:0;
+    letter-spacing:normal;
+    text-transform:none;
+}
+
+.progression-stability-rolls {
+    margin-top:20px;
+    padding:10px;
+    border-color:#c3a067;
+    background:#1b1a21;
+}
+
+.progression-stability-rolls > .progression-stability-rolls-controls {
+    align-items:center;
+    margin-top:0;
+    padding:0 4px;
+}
+
+.progression-stability-rolls-controls p {
+    margin:0;
+}
+
+.beyonder-power-list {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.beyonder-power-list > h2 {
+    margin:0;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+}
+
+.beyonder-power-cards {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:start;
+    gap:12px;
+}
+
+.beyonder-power-card {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-width:0;
+    padding:12px;
+    border:1px solid #806c4d;
+    border-radius:3px;
+    background:#25232c;
+    color:#ece3d3;
+}
+
+.beyonder-power-card > header {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+    padding-bottom:8px;
+    border-bottom:1px solid #806c4d;
+}
+
+.beyonder-power-card h3 {
+    margin:0;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:22px;
+}
+
+.beyonder-power-card > header span,
+.beyonder-power-card-abilities > span {
+    color:#a0896f;
+    font-size:11px;
+}
+
+.beyonder-power-card-modifier {
+    flex:0 0 auto;
+    color:#c3a067;
+    font-size:18px;
+}
+
+.beyonder-power-card-description,
+.beyonder-power-card-effects p {
+    margin:0;
+    color:#ece3d3;
+    font-size:13px;
+    white-space:pre-wrap;
+}
+
+.beyonder-power-card-abilities {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.beyonder-power-card-abilities > div {
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+}
+
+.beyonder-power-card-abilities > div span {
+    padding:3px 6px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    color:#ece3d3;
+    font-size:11px;
+}
+
+.beyonder-power-card-abilities em,
+.beyonder-power-card-effects .empty,
+.beyonder-power-empty {
+    color:#a0896f;
+    font-size:12px;
+}
+
+.beyonder-power-card-effects summary {
+    color:#c3a067;
+    cursor:pointer;
+}
+
+.beyonder-power-card-effects p {
+    margin-top:7px;
+}
+
+.beyonder-power-card > button {
+    align-self:flex-start;
+    padding:5px 10px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+    cursor:pointer;
+}
+
+.beyonder-power-card > button:hover {
+    border-color:#c3a067;
+    color:#c3a067;
+}
+
+
+/* ============================================
+   34. POWER OPTIONS IN THE ROLL DIALOG
+============================================ */
+
+.beyond-roll-dialog .beyond-roll-powers {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:8px 0 12px;
+    padding:10px;
+    border:1px solid #806c4d;
+    border-radius:3px;
+    background:#25232c;
+}
+
+.beyond-roll-dialog .beyond-roll-powers > legend {
+    padding:0 7px;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:18px;
+}
+
+.beyond-roll-dialog .beyond-roll-power-options {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px 12px;
+}
+
+.beyond-roll-dialog .beyond-roll-power-option {
+    display:flex;
+    align-items:center;
+    gap:7px;
+    min-width:0;
+    padding:5px 7px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    cursor:pointer;
+}
+
+.beyond-roll-dialog .beyond-roll-power-option input {
+    flex:0 0 auto;
+    accent-color:#c3a067;
+}
+
+.beyond-roll-dialog .beyond-roll-power-option span {
+    flex:1;
+    min-width:0;
+    overflow-wrap:anywhere;
+    font-family:"BeyondBase";
+    font-size:12px;
+}
+
+.beyond-roll-dialog .beyond-roll-power-option strong {
+    flex:0 0 auto;
+    color:#c3a067;
+    font-size:13px;
+}
+
+.beyond-roll-dialog .beyond-roll-power-total {
+    align-self:flex-end;
+    color:#a0896f;
+    font-size:12px;
+}
+
+.beyond-roll-dialog .beyond-roll-power-total strong {
+    color:#c3a067;
+}
+
+.chat-message .beyond-roll-breakdown-powers {
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    width:100%;
+}
+
+.chat-message .beyond-roll-breakdown-powers .beyond-roll-stat {
+    flex:1 1 110px;
+    min-width:90px;
+}
+
+@media (max-width:650px) {
+    .beyonder-power-cards,
+    .beyond-roll-dialog .beyond-roll-power-options {
+        grid-template-columns:1fr;
+    }
+
+    .beyonder-power-link-fields {
+        grid-template-columns:1fr;
+    }
+}
+
+.beyond-roll-dialog .beyond-roll-power-options input[type="hidden"] {
+    display:none;
+}
+
+/* ============================================
+   36. BEYONDER POWER ABILITY CONFIGURATIONS
+============================================ */
+
+.beyonder-power-editor .beyonder-power-version,
+.beyonder-power-editor .beyonder-power-upgrades {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:12px;
+    border:1px solid #806c4d;
+    border-radius:3px;
+    background:#211f27;
+}
+
+.beyonder-power-editor .beyonder-power-version-header {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.beyonder-power-editor .beyonder-power-version-header > div {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.beyonder-power-editor .beyonder-power-ability-group {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.beyonder-power-editor .beyonder-power-ability-group h4 {
+    margin:0;
+    padding-bottom:4px;
+    border-bottom:1px solid #554833;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:17px;
+}
+
+.beyonder-power-editor .beyonder-power-ability-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:5px 10px;
+}
+
+.beyonder-power-editor .beyonder-power-ability-row {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 90px;
+    align-items:center;
+    gap:7px;
+    min-width:0;
+    padding:5px 7px;
+    border:1px solid #554833;
+    border-radius:2px;
+    background:#1b1a21;
+}
+
+/* ============================================
+   CUSTOM BEYONDER POWER CHECKBOXES
+============================================ */
+
+/* Ability checkbox label */
+.beyonder-power-editor .beyonder-power-ability-check {
+    position:relative;
+    display:grid;
+    grid-template-columns:15px minmax(0,1fr);
+    align-items:center;
+    gap:7px;
+    min-width:0;
+    margin:0;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+    font-size:12px;
+    cursor:pointer;
+}
+
+/* Completely hide the native checkbox */
+.beyonder-power-editor .beyonder-power-ability-check input[type="checkbox"] {
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    z-index:2;
+    display:block !important;
+    box-sizing:border-box !important;
+    width:15px !important;
+    height:15px !important;
+    min-width:15px !important;
+    min-height:15px !important;
+    margin:0 !important;
+    padding:0 !important;
+    opacity:0 !important;
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    background:transparent !important;
+    background-image:none !important;
+    border:none !important;
+    box-shadow:none !important;
+    outline:none;
+    cursor:pointer;
+}
+
+/* Custom checkbox box */
+.beyonder-power-editor .beyonder-power-ability-checkbox {
+    position:relative;
+    display:block;
+    box-sizing:border-box;
+    width:15px;
+    height:15px;
+    min-width:15px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    pointer-events:none;
+}
+
+/* Gold checkmark inside the box */
+.beyonder-power-editor input[type="checkbox"]:checked + .beyonder-power-ability-checkbox::after {
+    content:"";
+    position:absolute;
+    top:1px;
+    left:4px;
+    width:4px;
+    height:8px;
+    box-sizing:content-box;
+    border:solid #c3a067;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+}
+
+/* Keep background dark when selected */
+.beyonder-power-editor input[type="checkbox"]:checked + .beyonder-power-ability-checkbox {
+    background:#1b1a21;
+    border-color:#c3a067;
+}
+
+/* Hover */
+.beyonder-power-editor .beyonder-power-ability-check:hover .beyonder-power-ability-checkbox {
+    border-color:#c3a067;
+}
+
+/* Keyboard focus */
+.beyonder-power-editor input[type="checkbox"]:focus-visible + .beyonder-power-ability-checkbox {
+    outline:2px solid #c3a067;
+    outline-offset:2px;
+}
+
+/* Disabled */
+.beyonder-power-editor input[type="checkbox"]:disabled + .beyonder-power-ability-checkbox {
+    opacity:0.5;
+}
+
+.beyonder-power-editor .beyonder-power-ability-name {
+    min-width:0;
+    overflow-wrap:anywhere;
+}
+
+.beyonder-power-editor .beyonder-power-ability-modifier {
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    min-width:0;
+    color:#a0896f;
+    font-family:"BeyondBase";
+    font-size:10px;
+}
+
+.beyonder-power-editor .beyonder-power-ability-modifier input {
+    width:100%;
+    height:25px;
+    padding:2px 4px;
+    text-align:center;
+}
+
+.beyonder-power-editor .beyonder-power-add-upgrade,
+.beyonder-power-editor .beyonder-power-remove-upgrade {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    flex:0 0 auto;
+    padding:6px 9px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+    font-size:12px;
+    cursor:pointer;
+}
+
+.beyonder-power-editor .beyonder-power-add-upgrade span {
+    color:#c3a067;
+    font-size:19px;
+    line-height:12px;
+}
+
+.beyonder-power-editor .beyonder-power-add-upgrade:hover,
+.beyonder-power-editor .beyonder-power-remove-upgrade:hover {
+    border-color:#c3a067;
+    color:#c3a067;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-list {
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade {
+    border:1px solid #806c4d;
+    border-radius:3px;
+    background:#25232c;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade > summary {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 10px;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:17px;
+    cursor:pointer;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-summary-action,
+.beyonder-power-editor .beyonder-power-no-upgrades {
+    color:#a0896f;
+    font-family:"BeyondBase";
+    font-size:11px;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-content {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:10px;
+    border-top:1px solid #554833;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-controls {
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-controls label {
+    display:flex;
+    flex-direction:column;
+    width:160px;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-controls select {
+    height:30px;
+}
+
+/* Individual Beyonder Powers are collapsible and displayed in origin-sequence order. */
+.beyonder-power-card {
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    overflow:hidden;
+}
+
+.beyonder-power-card > summary {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px;
+    cursor:pointer;
+    list-style-position:inside;
+}
+
+.beyonder-power-card > summary::marker {
+    color:#c3a067;
+}
+
+.beyonder-power-card-heading {
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    min-width:0;
+}
+
+.beyonder-power-current-version {
+    flex:0 0 auto;
+    color:#c3a067;
+    font-size:11px;
+    text-align:right;
+}
+
+.beyonder-power-card-content {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:0 12px 12px;
+}
+
+.beyonder-power-card-abilities > div span strong {
+    margin-left:4px;
+    color:#c3a067;
+}
+
+.beyonder-power-card-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.beyonder-power-card-actions button.remove {
+    border-color:#8b5550;
+    color:#d59b91;
+}
+
+.beyonder-power-card-actions button.remove:hover {
+    border-color:#d59b91;
+    color:#f0b4aa;
+}
+
+@media (max-width:650px) {
+    .beyonder-power-editor .beyonder-power-ability-grid {
+        grid-template-columns:1fr;
+    }
+
+    .beyonder-power-editor .beyonder-power-version-header,
+    .beyonder-power-editor .beyonder-power-upgrade-controls {
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .beyonder-power-editor .beyonder-power-upgrade-controls label {
+        width:100%;
+    }
+
+    .beyonder-power-card > summary {
+        align-items:flex-start;
+    }
+}
+
+.beyonder-power-card-actions button {
+    padding:5px 10px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    color:#ece3d3;
+    font-family:"BeyondBase";
+    cursor:pointer;
+}
+
+.beyonder-power-card-actions button:hover {
+    border-color:#c3a067;
+    color:#c3a067;
+}
+/* ============================================
+   36A. BEYONDER POWER ATTRIBUTE CONFIGURATION
+============================================ */
+
+.beyonder-power-editor .beyonder-power-attribute-version {
+    margin-top:0;
+}
+
+.beyonder-power-editor .beyonder-power-upgrade-subheading {
+    margin:4px 0 0;
+    padding-bottom:4px;
+    border-bottom:1px solid #554833;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:17px;
+}
+
+/* Keep the custom checkbox markup consistent for abilities and attributes. */
+.beyonder-power-editor .beyonder-power-ability-check {
+    position:relative;
+    display:grid;
+    grid-template-columns:15px minmax(0,1fr);
+    align-items:center;
+    gap:7px;
+    min-width:0;
+    margin:0;
+}
+
+.beyonder-power-editor .beyonder-power-ability-check input[type="checkbox"] {
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    z-index:2;
+    display:block !important;
+    box-sizing:border-box !important;
+    width:15px !important;
+    height:15px !important;
+    min-width:15px !important;
+    min-height:15px !important;
+    margin:0 !important;
+    padding:0 !important;
+    opacity:0 !important;
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    background:transparent !important;
+    background-image:none !important;
+    border:none !important;
+    box-shadow:none !important;
+    cursor:pointer;
+}
+
+.beyonder-power-editor .beyonder-power-ability-checkbox {
+    position:relative;
+    display:block;
+    box-sizing:border-box;
+    width:15px;
+    height:15px;
+    min-width:15px;
+    border:1px solid #806c4d;
+    border-radius:2px;
+    background:#1b1a21;
+    pointer-events:none;
+}
+
+.beyonder-power-editor input[type="checkbox"]:checked + .beyonder-power-ability-checkbox::after {
+    content:"";
+    position:absolute;
+    top:1px;
+    left:4px;
+    width:4px;
+    height:8px;
+    box-sizing:content-box;
+    border:solid #c3a067;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+}
+
+.beyonder-power-editor input[type="checkbox"]:checked + .beyonder-power-ability-checkbox {
+    border-color:#c3a067;
+    background:#1b1a21;
+}
+
+.beyonder-power-editor .beyonder-power-ability-check:hover .beyonder-power-ability-checkbox {
+    border-color:#c3a067;
+}
+
+.beyonder-power-editor input[type="checkbox"]:focus-visible + .beyonder-power-ability-checkbox {
+    outline:2px solid #c3a067;
+    outline-offset:2px;
+}
+
+.beyonder-power-editor input[type="checkbox"]:disabled + .beyonder-power-ability-checkbox {
+    opacity:0.5;
+}
+
+.beyonder-power-editor .beyonder-power-ability-name {
+    min-width:0;
+    overflow-wrap:anywhere;
+}
+
+.beyonder-power-card-attributes > div span strong {
+    margin-left:4px;
+    color:#c3a067;
+}
+/* Three Attribute Categories in Columns */
+
+.beyonder-power-editor .beyonder-power-attribute-categories {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    align-items:start;
+    gap:12px;
+    width:100%;
+}
+
+/* Keep each category compact */
+
+.beyonder-power-editor .beyonder-power-attribute-categories .beyonder-power-ability-group {
+    min-width:0;
+}
+
+/* Stack the three Attributes vertically inside each category */
+
+.beyonder-power-editor .beyonder-power-attribute-categories .beyonder-power-ability-grid {
+    grid-template-columns:minmax(0,1fr);
+    gap:5px;
+}
+
+/* Responsive layout */
+
+@media (max-width:650px) {
+    .beyonder-power-editor .beyonder-power-attribute-categories {
+        grid-template-columns:1fr;
+    }
+}
+.beyonder-power-sequence-group {
+    padding:10px;
+    border:0;
+    border-radius:3px;
+    background:#1f1d25;
+}
+
+.beyonder-power-sequence-group > summary {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    color:#c3a067;
+    font-family:"BeyondFancy";
+    font-size:20px;
+    cursor:pointer;
+}
+
+.beyonder-power-sequence-group > summary span {
+    color:#a0896f;
+    font-family:"BeyondBase";
+    font-size:12px;
+}
+
+.beyonder-power-sequence-group > .beyonder-power-cards {
+    margin-top:10px;
+}
+
+.beyonder-power-favorites {
+    border-color:#c3a067;
+}
+
+.beyonder-power-card-summary-actions {
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    flex:0 0 auto;
+}
+
+.beyonder-power-favorite {
+    padding:2px 5px;
+    border:1px solid #806c4d;
+    border-radius:3px;
+    background:#1b1a21;
+    color:#a0896f;
+    font-size:20px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.beyonder-power-favorite:hover,
+.beyonder-power-favorite.active {
+    border-color:#c3a067;
+    color:#c3a067;
+}

@@ -1,0 +1,706 @@
+
+<div class="beyonder-sheet">
+
+    <header class="identity">
+
+        <div class="character-portrait" data-action="edit-portrait" role="button" tabindex="0" data-tooltip="Change portrait">
+        <img src="{{actor.img}}" alt="{{actor.name}}'s portrait">
+        </div>
+
+        <div class="identity-content">
+            <h1>Record of Identity</h1>
+        <!-- Row 1: Character identity -->
+        <div class="identity-row">
+            <label class="character-name">
+                <input type="text" name="name" value="{{actor.name}}" {{#unless editable}}disabled{{/unless}}>
+                Character Name
+            </label>
+
+            <label class="player">
+                <input type="text" name="system.details.player" value="{{system.details.player}}" {{#unless editable}}disabled{{/unless}}>
+                Player
+            </label>
+
+            <label class="archetype">
+                <input type="text" name="system.details.archetype" value="{{system.details.archetype}}" {{#unless editable}}disabled{{/unless}}>
+                Archetype
+            </label>
+        </div>
+        
+        <!-- Row 2: Pathway information -->
+        <div class="identity-row">
+            <label class="pathway">
+                <input type="text" value="{{system.pathway.pathway.name}}" disabled>
+                Pathway of the Divine
+            </label>
+
+            <label class="sequence">
+                <input type="text" value="{{system.pathway.sequence.number}}" disabled>
+                Sequence
+            </label>
+
+            <label class="sequence-title">
+                <input type="text" value="{{system.pathway.sequence.name}}" disabled>
+                Sequence Title
+            </label>
+
+            <label class="tier">
+                <input type="text" value="{{tierLabel}}" disabled>
+                Tier
+            </label>
+        </div>
+
+        <!-- Row 3: Organization and experience -->
+        <div class="identity-row">
+            <label class="organization">
+                <input type="text" name="system.details.organization" value="{{system.details.organization}}" {{#unless editable}}disabled{{/unless}}>
+                Organization / Church
+            </label>
+
+            <label class="honorific">
+                <textarea name="system.details.honorificName" rows="1" {{#unless editable}}disabled{{/unless}}>{{system.details.honorificName}}</textarea>
+                Honorific Name
+            </label>
+
+            <label class="experience">
+                <input type="number" name="system.details.totalExperience" value="{{system.details.totalExperience}}" min="0" {{#unless editable}}disabled{{/unless}}>
+                Total Experience
+            </label>
+        </div>
+        </div>
+    </header>
+
+    <div class="fields">
+        <button type="button" class="field-tab active" data-page="attributes">Attributes</button>
+        <button type="button" class="field-tab" data-page="resources">Resources</button>
+        <button type="button" class="field-tab" data-page="pathway">Pathway</button>
+        <button type="button" class="field-tab" data-page="progression">Progression</button>
+        <button type="button" class="field-tab" data-page="beyonder">Beyonder Powers</button>
+        <button type="button" class="field-tab" data-page="social">Social</button>
+        <button type="button" class="field-tab" data-page="inventory">Inventory</button>
+    </div>
+
+    <div class="sheet-pages">
+
+        <!-- ATTRIBUTES PAGE -->
+        <div class="sheet-page" data-page="attributes">
+
+            <div class="attribute-list">
+                <h2>Attributes</h2>
+
+                <label class="section-lock">
+                <input type="checkbox" data-lock="attributes"  
+                    {{#if attributeLocked}}checked{{/if}}
+                    {{#unless editable}}disabled{{/unless}}>
+                <img class="lock-icon"
+                src="systems/Beyond/assets/icons/{{#if attributeLocked}}lock-closed{{else}}lock-open{{/if}}.svg"
+                alt="Toggle section lock" data-tooltip-direction="DOWN" data-tooltip="Lock editing of attribute scores">
+                </label>
+
+                <button type="button" class="section-reset" data-reset-bonuses="attributes"  data-tooltip-direction="DOWN" data-tooltip="Reset all attribute bonuses">
+                <img src="systems/Beyond/assets/icons/reset.svg" alt="Reset bonuses">
+                </button>
+
+                <div class="attribute-main">
+
+                    {{#each attributeDots as |attributes category|}}
+                        <div class="attribute-cat">
+
+                            <div class="category-header">
+                                <h3>{{category}}</h3>
+
+                                <div class="category-importance">
+                                    {{#each @root.importanceOptions as |importance|}}
+                                        <label>
+                                            <input type="radio"
+                                                name="system.attributes.{{category}}.importance"
+                                                value="{{importance}}"
+                                                {{#if (eq attributes.importance importance)}}checked{{/if}}
+                                                {{#unless @root.editable}}disabled{{/unless}}>
+                                            <span>{{lookup @root.importanceInitials importance}}</span>
+                                        </label>
+                                    {{/each}}
+                                </div>
+                            </div>
+
+                            {{#each attributes as |attribute name|}}
+                                {{#unless (or (eq name "importance") (eq name "categories"))}}
+                                    <div class="attribute-row">
+                                        <label class="attribute-name"
+                                            data-roll-type="attribute"
+                                            data-category="{{category}}"
+                                            data-name="{{name}}"
+                                            data-tooltip="Click to roll">
+                                            {{name}}
+                                        </label>
+
+                                        <div class="attribute-controls">
+                                            <div class="attribute-dots">
+                                                {{#each attribute.dots as |dot|}}
+                                                    <label class="attribute-dot {{#if dot.locked}}locked{{/if}} {{#if dot.creationCap}}creation-cap{{/if}}">
+                                                        <input type="checkbox"
+                                                            data-path="system.attributes.{{category}}.{{name}}.value"
+                                                            value="{{dot.value}}"
+                                                            {{#if dot.checked}}checked{{/if}}
+                                                            {{#if dot.locked}}disabled{{/if}}
+                                                            {{#unless dot.editable}}disabled{{/unless}}>
+                                                        <span></span>
+                                                    </label>
+                                                {{/each}}
+                                            </div>
+
+                                            <div class="attribute-bonus-control">
+                                                <button type="button"
+                                                    class="attribute-bonus-button"
+                                                    data-delta="-1"
+                                                    {{#unless @root.editable}}disabled{{/unless}}>−</button>
+
+                                                <input type="number"
+                                                    class="attribute-bonus"
+                                                    name="system.attributes.{{category}}.{{name}}.bonus"
+                                                    value="{{attribute.bonus}}"
+                                                    step="1"
+                                                    {{#unless @root.editable}}disabled{{/unless}}>
+
+                                                <button type="button"
+                                                    class="attribute-bonus-button"
+                                                    data-delta="1"
+                                                    {{#unless @root.editable}}disabled{{/unless}}>+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/unless}}
+                            {{/each}}
+
+                        </div>
+                    {{/each}}
+
+                </div>
+            </div>
+
+            <div class="ability-list">
+                <h2>Abilities</h2>
+
+                <label class="section-lock">
+                <input type="checkbox" data-lock="abilities"
+                    {{#if abilityLocked}}checked{{/if}}
+                    {{#unless editable}}disabled{{/unless}}>
+                    
+                <img class="lock-icon"
+                src="systems/Beyond/assets/icons/{{#if abilityLocked}}lock-closed{{else}}lock-open{{/if}}.svg"
+                alt="Toggle section lock" data-tooltip-direction="DOWN" data-tooltip="Lock editing of ability scores">
+                </label>
+
+                <button type="button" class="section-reset" data-reset-bonuses="abilities" data-tooltip-direction="DOWN" data-tooltip="Reset all ability bonuses">
+                <img src="systems/Beyond/assets/icons/reset.svg" alt="Reset bonuses">
+                </button>
+
+                <div class="ability-main">
+
+                    {{#each abilityGroups as |group category|}}
+                        <div class="ability-category">
+
+                            <div class="category-header">
+                                <h3>{{category}}</h3>
+
+                                <div class="category-importance">
+                                    {{#each @root.importanceOptions as |importance|}}
+                                        <label>
+                                            <input type="radio"
+                                                name="system.abilities.{{category}}.importance"
+                                                value="{{importance}}"
+                                                {{#if (eq group.importance importance)}}checked{{/if}}
+                                                {{#unless @root.editable}}disabled{{/unless}}>
+                                            <span>{{lookup @root.importanceInitials importance}}</span>
+                                        </label>
+                                    {{/each}}
+                                </div>
+                            </div>
+
+                            {{#each group.abilities as |ability|}}
+                                <div class="ability-row">
+                                    <div class="ability-controls">
+
+                                        <span class="ability-name"
+                                            data-roll-type="ability"
+                                            data-category="{{category}}"
+                                            data-name="{{ability.name}}"
+                                            data-tooltip="Click to roll">
+                                            {{ability.label}}{{#if ability.dangerous}}<span class="dangerous-knowledge"> ✟</span>{{/if}}
+                                        </span>
+
+                                        <div class="ability-dots">
+                                            {{#each ability.dots as |dot|}}
+                                                <label class="ability-dot {{#if dot.locked}}locked{{/if}}">
+                                                    <input type="checkbox"
+                                                        data-path="system.abilities.{{category}}.{{ability.name}}.value"
+                                                        value="{{dot.value}}"
+                                                        {{#if dot.checked}}checked{{/if}}
+                                                        {{#if dot.locked}}disabled{{/if}}
+                                                        {{#unless dot.editable}}disabled{{/unless}}>
+                                                    <span></span>
+                                                </label>
+                                            {{/each}}
+                                        </div>
+
+                                        <div class="ability-bonus-control">
+                                            <button type="button"
+                                                class="ability-bonus-button"
+                                                data-delta="-1"
+                                                {{#unless @root.editable}}disabled{{/unless}}>−</button>
+
+                                            <input type="number"
+                                                class="ability-bonus"
+                                                name="system.abilities.{{category}}.{{ability.name}}.bonus"
+                                                value="{{ability.bonus}}"
+                                                step="1"
+                                                {{#unless @root.editable}}disabled{{/unless}}>
+
+                                            <button type="button"
+                                                class="ability-bonus-button"
+                                                data-delta="1"
+                                                {{#unless @root.editable}}disabled{{/unless}}>+</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {{/each}}
+
+                        </div>
+                    {{/each}}
+
+                </div>
+            </div>
+
+            <!-- BACKGROUNDS -->
+            <div class="background-list">
+                <h2>Backgrounds</h2>
+
+                <label class="section-lock">
+                <input type="checkbox" data-lock="backgrounds" 
+                    {{#if backgroundLocked}}checked{{/if}}
+                    {{#unless editable}}disabled{{/unless}}>
+                <img class="lock-icon"
+                src="systems/Beyond/assets/icons/{{#if backgroundLocked}}lock-closed{{else}}lock-open{{/if}}.svg"
+                alt="Toggle section lock" data-tooltip-direction="DOWN" data-tooltip="Lock editing of backgrounds">
+                </label>
+
+                <div class="background-main">
+                    {{#each backgroundGroups as |background|}}
+                        <div class="background-row">
+
+                            <label class="background-name">{{background.label}}</label>
+
+                            <div class="background-controls">
+
+                                <!-- Basic Levels -->
+                                <div class="background-basic-dots">
+                                    {{#each background.valueDots as |dot|}}
+                                        <label class="attribute-dot background-dot">
+                                            <input type="checkbox"
+                                                data-path="system.backgrounds.{{background.name}}.value"
+                                                value="{{dot.value}}"
+                                                {{#if dot.checked}}checked{{/if}}
+                                                {{#unless dot.editable}}disabled{{/unless}}>
+                                            <span></span>
+                                        </label>
+                                    {{/each}}
+                                </div>
+
+                                <!-- Legendary Levels -->
+                                <div class="background-legendary-dots">
+                                    {{#each background.legendaryDots as |dot|}}
+                                        <label class="attribute-dot background-dot background-legendary-dot">
+                                            <input type="checkbox"
+                                                data-path="system.backgrounds.{{background.name}}.legendary"
+                                                value="{{dot.value}}"
+                                                {{#if dot.checked}}checked{{/if}}
+                                                {{#unless dot.editable}}disabled{{/unless}}>
+                                            <span>{{#if dot.checked}}✦{{else}}✧{{/if}}</span>
+                                        </label>
+                                    {{/each}}
+                                </div>
+
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- INTEGRITY PAGE -->
+        <div class="sheet-page" data-page="resources">
+            <div class="integrity">
+                <h2>Integrity</h2>
+
+                <div class="integrity-boxes">
+                    {{#each integrityBoxes as |box|}}
+                        <div class="integrity-box {{box.type}}"
+                            data-index="{{box.index}}"
+                            title="{{box.label}}"></div>
+                    {{/each}}
+                </div>
+
+                <div class="integrity-conditions">
+                    <div class="integrity-condition-list">
+
+                        <div class="integrity-condition">
+                            <span class="condition-marker normal {{#if integrityConditions.unharmed}}active{{/if}}"></span>
+                            <span class="condition-points">5+</span>
+                            <span class="condition-name">Unharmed</span>
+                            <span class="condition-penalty">no penalty</span>
+                        </div>
+
+                        <div class="integrity-condition">
+                            <span class="condition-marker normal {{#if integrityConditions.bruised}}active{{/if}}"></span>
+                            <span class="condition-points">4</span>
+                            <span class="condition-name">Bruised</span>
+                            <span class="condition-penalty">−1d physical</span>
+                        </div>
+
+                        <div class="integrity-condition">
+                            <span class="condition-marker normal {{#if integrityConditions.wounded}}active{{/if}}"></span>
+                            <span class="condition-points">3</span>
+                            <span class="condition-name">Wounded</span>
+                            <span class="condition-penalty">−2d physical</span>
+                        </div>
+
+                        <div class="integrity-condition">
+                            <span class="condition-marker severe {{#if integrityConditions.badlyWounded}}active{{/if}}"></span>
+                            <span class="condition-points">2</span>
+                            <span class="condition-name">Badly Wounded</span>
+                            <span class="condition-penalty">−3d, no running</span>
+                        </div>
+
+                        <div class="integrity-condition">
+                            <span class="condition-marker severe {{#if integrityConditions.crippled}}active{{/if}}"></span>
+                            <span class="condition-points">1</span>
+                            <span class="condition-name">Crippled</span>
+                            <span class="condition-penalty">−5d, 1 action</span>
+                        </div>
+
+                        <div class="integrity-condition">
+                            <span class="condition-marker severe {{#if integrityConditions.incapacitated}}active{{/if}}"></span>
+                            <span class="condition-points">0</span>
+                            <span class="condition-name">Incapacitated</span>
+                            <span class="condition-penalty">unconscious</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="spirituality">
+                <h2>Spirituality</h2>
+
+                <div class="spirituality-count">
+                    {{spirituality.value}} / {{spirituality.max}}
+                </div>
+
+                <div class="spirituality-track">
+                    {{#each spirituality.boxes as |box|}}
+                        <button
+                            type="button"
+                            class="spirituality-box {{#if box.checked}}filled{{/if}}"
+                            data-value="{{box.value}}"
+                            title="Spirituality {{box.value}}"
+                            {{#unless box.editable}}disabled{{/unless}}>
+                        </button>
+                    {{/each}}
+
+                    {{#unless spirituality.max}}
+                        <span class="spirituality-empty">No pathway</span>
+                    {{/unless}}
+                </div>
+            </div>
+            <div class="determination">
+
+            <h2>Determination</h2>
+
+            <!-- Maximum Lock -->
+            <label class="section-lock">
+                <input type="checkbox"
+                    data-lock="determination"
+                    {{#if determinationLocked}}checked{{/if}}
+                    {{#unless editable}}disabled{{/unless}}>
+
+                <img class="lock-icon"
+                    src="systems/Beyond/assets/icons/{{#if determinationLocked}}lock-closed{{else}}lock-open{{/if}}.svg"
+                    alt="Toggle determination maximum lock"
+                    data-tooltip-direction="DOWN"
+                    data-tooltip="Lock or unlock maximum Determination">
+            </label>
+
+            <div class="determination-tracks">
+
+                <!-- MAXIMUM -->
+                <div class="determination-track determination-max-track">
+                    <div class="determination-track-label determination-max-label">
+                        <span>Maximum</span>
+                    </div>
+
+                    <div class="determination-boxes determination-max-boxes">
+                        {{#each determination.maxBoxes as |box|}}
+                            <div class="determination-box max-box {{#if box.checked}}active{{/if}} {{#if box.penalized}}penalized{{/if}}"
+                                data-track="max"
+                                data-value="{{box.value}}">
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+                <!-- TEMPORARY -->
+                <div class="determination-track determination-temp-track">
+                    <div class="determination-track-label determination-temp-label">
+                        <span>Temporary</span>
+                        <span>{{determination.temp}} / {{determination.max}}{{#if progressionPage.isCollapse}} · unavailable{{/if}}</span>
+                    </div>
+
+                    <div class="determination-boxes determination-temp-boxes">
+                        {{#each determination.tempBoxes as |box|}}
+                            <div class="determination-box temp-box {{#if box.checked}}active{{/if}} {{#if box.disabled}}disabled{{/if}}"
+                                data-track="temp"
+                                data-value="{{box.value}}">
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </div>
+
+
+        <div class="sheet-page pathway-page" data-page="pathway" hidden>
+            <section class="pathway-overview">
+                <div class="pathway-overview-icon">
+                    {{#if pathwayPage.icon}}
+                        <img src="{{pathwayPage.icon}}" alt="{{pathwayPage.name}} icon">
+                    {{else}}
+                        <span>No icon</span>
+                    {{/if}}
+                </div>
+
+                <div class="pathway-overview-details">
+                    <h2>{{pathwayPage.name}}</h2>
+
+                    <div class="pathway-overview-fields">
+                        <div class="pathway-overview-field">
+                            <span>Current Sequence</span>
+                            {{#if pathwayPage.hasSequence}}
+                                <strong>Sequence {{pathwayPage.sequenceNumber}}{{#if pathwayPage.sequenceName}} · {{pathwayPage.sequenceName}}{{/if}}</strong>
+                            {{else}}
+                                <strong>Not set</strong>
+                            {{/if}}
+                        </div>
+
+                        <div class="pathway-overview-field">
+                            <span>Profile</span>
+                            <strong>{{pathwayPage.profile}}</strong>
+                        </div>
+
+                        <div class="pathway-overview-field">
+                            <span>Authorities</span>
+                            {{#if pathwayPage.authorities}}
+                                <strong>{{pathwayPage.authorities}}</strong>
+                            {{else}}
+                                <strong>Not set</strong>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="progression-notes-grid pathway-notes-grid">
+                <section class="progression-field progression-note-field">
+                    <h3 class="progression-subsection-heading">Acting Method</h3>
+                    <textarea aria-label="Acting Method" rows="4" data-progression-field="actingMethod" {{#unless editable}}disabled{{/unless}}>{{pathwayPage.actingMethod}}</textarea>
+                </section>
+
+                <section class="progression-field progression-note-field">
+                    <h3 class="progression-subsection-heading">Anchors</h3>
+                    <textarea aria-label="Anchors" rows="4" data-progression-field="anchors" {{#unless editable}}disabled{{/unless}}>{{pathwayPage.anchors}}</textarea>
+                </section>
+            </div>
+        </div>
+        <div class="sheet-page progression-page" data-page="progression" hidden>
+            <section class="progression-dashboard">
+                <h2 class="progression-panel-heading">Progression</h2>
+
+                <div class="progression-tracks">
+                    <section class="progression-field progression-digestion-field">
+                        <div class="progression-digestion-heading">
+                            <h3 class="progression-subsection-heading">Digestion</h3>
+                            <span class="progression-field-state" data-digestion-value>{{progressionPage.digestion}} / 100</span>
+                        </div>
+                        <div class="progression-digestion-display">
+                            <img src="{{progressionPage.digestionImage}}" alt="Digestion: {{progressionPage.digestion}} out of 100" data-digestion-image>
+                            <div class="progression-digestion-slider-row">
+                                <button type="button" data-progression-adjust="digestion" data-delta="-5" aria-label="Decrease Digestion by 5" {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.canDecreaseDigestion}}disabled{{/unless}}>−</button>
+                                <input class="progression-digestion-slider" type="range" min="0" max="100" step="5" value="{{progressionPage.digestion}}" aria-label="Digestion" style="--digestion-fill: {{progressionPage.digestion}}%" data-progression-field="digestion" {{#unless editable}}disabled{{/unless}}>
+                                <button type="button" data-progression-adjust="digestion" data-delta="5" aria-label="Increase Digestion by 5" {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.canIncreaseDigestion}}disabled{{/unless}}>+</button>
+                            </div>
+                            <button class="progression-advance-button" type="button" data-advance-pathway {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.canAdvance}}disabled{{/unless}}>Advance</button>
+                            {{#if progressionPage.digestionOverflow}}
+                                <small class="progression-digestion-overflow" data-clear-digestion-overflow title="Right-click to clear negative Digestion">Negative Digestion: {{progressionPage.digestionOverflow}} / 20 toward +1 Stability. Right-click to clear.</small>
+                            {{/if}}
+                        </div>
+                    </section>
+
+                    <section class="progression-field progression-transgressions-field">
+                        <h3 class="progression-subsection-heading">Transgressions</h3>
+                        <span class="progression-field-state">{{#if progressionPage.hasTransgressions}}{{progressionPage.transgressions}} · {{progressionPage.transgressionStage}}{{else}}None yet{{/if}} / 10</span>
+                        <div class="progression-box-stepper">
+                            <button type="button" data-progression-adjust="transgressions" data-delta="-1" aria-label="Decrease Transgressions" {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.canDecreaseTransgressions}}disabled{{/unless}}>−</button>
+                            <div class="progression-boxes progression-boxes-square" aria-label="Transgressions track">
+                                {{#each progressionPage.transgressionBoxes as |box|}}
+                                    <span class="progression-box {{#if box.active}}active{{/if}}"></span>
+                                {{/each}}
+                            </div>
+                            <button type="button" data-progression-adjust="transgressions" data-delta="1" aria-label="Increase Transgressions" {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.canIncreaseTransgressions}}disabled{{/unless}}>+</button>
+                        </div>
+                        <small>Each added point removes 10 Digestion. <br> {{progressionPage.transgressionEffects}}</small>
+                    </section>
+
+                    <section class="progression-field progression-stability-field">
+                        <h3 class="progression-subsection-heading">Stability</h3>
+                        <span class="progression-field-state">{{progressionPage.stability}} / 7</span>
+                        <span class="progression-field-state">{{progressionPage.stabilityStage}}</span>
+                        <div class="progression-box-stepper">
+                            <button type="button" data-progression-adjust="stability" data-delta="-1" aria-label="Decrease Stability" {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.stability}}disabled{{/unless}}>−</button>
+                            <div class="progression-boxes progression-boxes-round" aria-label="Stability track">
+                                {{#each progressionPage.stabilityBoxes as |box|}}
+                                    <span class="progression-box {{#if box.active}}active{{/if}}"></span>
+                                {{/each}}
+                            </div>
+                            <button type="button" data-progression-adjust="stability" data-delta="1" aria-label="Increase Stability" {{#unless editable}}disabled{{/unless}} {{#if progressionPage.isCollapse}}disabled{{/if}}>+</button>
+                        </div>
+                        <small>{{progressionPage.stabilityEffects}}</small>
+                    </section>
+
+                    <section class="progression-stability-rolls">
+                        <h3 class="progression-subsection-heading">Stability Rolls</h3>
+                        <header class="progression-stability-rolls-controls">
+                            <p>Roll one die per effective maximum Determination.</p>
+                            <div class="progression-stability-actions">
+                                <button type="button" class="progression-history-link" data-open-stability-history>History ({{stabilityHistoryCount}})</button>
+                                <button type="button" data-stability-roll {{#unless editable}}disabled{{/unless}} {{#unless progressionPage.canRollStability}}disabled{{/unless}}>Roll Stability</button>
+                            </div>
+                        </header>
+
+                        {{#if stabilityHistory.length}}
+                            <ol class="progression-stability-history" hidden>
+                                {{#each stabilityHistory as |entry|}}
+                                    <li>
+                                        <strong>{{entry.trigger}}</strong>
+                                        <span>Exposure {{entry.exposure}} · Difficulty {{entry.difficulty}} · {{entry.pool}} dice · {{entry.successes}} successes</span>
+                                        <span class="{{#if entry.passed}}passed{{else}}failed{{/if}}">{{#if entry.passed}}Success{{else}}Fail{{/if}} {{entry.timestampLabel}}</span>
+                                        {{#if entry.outcomeLabel}}<span>{{entry.outcomeLabel}}</span>{{/if}}
+                                    </li>
+                                {{/each}}
+                            </ol>
+                        {{else}}
+                            <p class="progression-history-empty" hidden>No Stability rolls recorded yet.</p>
+                        {{/if}}
+                    </section>
+
+                    <section class="progression-loss-control" aria-label="Loss of Control">
+                        <h2 class="progression-panel-heading">Loss of Control</h2>
+                        <div class="progression-loss-control-steps">
+                            {{#each progressionPage.controlRungs as |rung|}}
+                                <div class="progression-loss-control-step {{#if rung.active}}active{{/if}} {{#if rung.current}}current{{/if}}" style="--rung: {{rung.number}}">
+                                    <div class="progression-loss-control-label">
+                                        <button type="button" class="progression-loss-control-box" data-control-rung="{{rung.number}}" aria-label="Set Loss of Control to rung {{rung.number}}" aria-pressed="{{#if rung.active}}true{{else}}false{{/if}}">{{rung.number}}</button>
+                                        <strong>{{rung.label}}</strong>
+                                    </div>
+                                    <div class="progression-loss-control-fill"></div>
+                                </div>
+                            {{/each}}
+                        </div>
+                        {{#if progressionPage.controlAtFinalRung}}<small>Final rung; reaching this point is almost equivalent to death.</small>{{/if}}
+                    </section>
+                </div>
+
+            </section>
+        </div>
+        <div class="sheet-page beyonder-powers-page" data-page="beyonder" hidden>
+            <section class="beyonder-power-list">
+                <h2>Beyonder Powers</h2>
+
+                {{#if beyonderPowerSections.length}}
+                    {{#each beyonderPowerSections as |section|}}
+                        <details class="beyonder-power-sequence-group {{#if section.isFavorite}}beyonder-power-favorites{{/if}}" {{#if section.isFavorite}}open{{/if}}>
+                            <summary>{{section.label}} <span>{{section.powers.length}}</span></summary>
+                            <div class="beyonder-power-cards">
+                        {{#each section.powers as |power|}}
+                            <details class="beyonder-power-card">
+                                <summary class="beyonder-power-card-summary">
+                                    <div class="beyonder-power-card-heading">
+                                        <h3>{{power.name}}</h3>
+                                        <span>{{power.pathwayName}} · Origin Sequence {{power.sequence}}</span>
+                                    </div>
+                                    <span class="beyonder-power-card-summary-actions">
+                                        <button type="button" class="beyonder-power-favorite {{#if power.isFavorite}}active{{/if}}" data-favorite-beyonder-power="{{power.id}}" aria-label="{{#if power.isFavorite}}Remove{{else}}Add{{/if}} {{power.name}} {{#if power.isFavorite}}from{{else}}to{{/if}} favorites" title="{{#if power.isFavorite}}Remove from{{else}}Add to{{/if}} favorites" {{#unless @root.editable}}disabled{{/unless}}>{{#if power.isFavorite}}&#9733;{{else}}&#9734;{{/if}}</button>
+                                        {{#if power.isUpgraded}}
+                                            <strong class="beyonder-power-current-version">Sequence {{power.activeVersionSequence}} version</strong>
+                                        {{else}}
+                                            <strong class="beyonder-power-current-version">Origin version</strong>
+                                        {{/if}}
+                                    </span>
+                                </summary>
+
+                                <div class="beyonder-power-card-content">
+                                    {{#if power.description}}
+                                        <p class="beyonder-power-card-description">{{power.description}}</p>
+                                    {{/if}}
+
+                                    {{#if power.relevantAbilities.length}}
+                                    <div class="beyonder-power-card-abilities">
+                                        <span>Relevant Abilities · Current Version</span>
+                                            <div>
+                                                {{#each power.relevantAbilities as |ability|}}
+                                                    <span>{{ability.label}} <strong>{{ability.modifierLabel}}</strong></span>
+                                                {{/each}}
+                                            </div>
+                                    </div>
+                                    {{/if}}
+
+                                    {{#if power.relevantAttributes.length}}
+                                    <div class="beyonder-power-card-abilities beyonder-power-card-attributes">
+                                        <span>Relevant Attributes · Current Version</span>
+                                            <div>
+                                                {{#each power.relevantAttributes as |attribute|}}
+                                                    <span>{{attribute.label}} <strong>{{attribute.modifierLabel}}</strong></span>
+                                                {{/each}}
+                                            </div>
+                                    </div>
+                                    {{/if}}
+
+                                    <details class="beyonder-power-card-effects">
+                                        <summary>Premade Effect Rolls</summary>
+                                        {{#if power.effectRolls}}
+                                            <p>{{power.effectRolls}}</p>
+                                        {{else}}
+                                            <p class="empty">No effect rolls configured yet.</p>
+                                        {{/if}}
+                                    </details>
+
+                                    <div class="beyonder-power-card-actions">
+                                        <button type="button" data-open-beyonder-power="{{power.id}}">Open Power</button>
+                                        <button type="button" class="remove" data-remove-beyonder-power="{{power.id}}">Remove from Character</button>
+                                    </div>
+                                </div>
+                            </details>
+                        {{/each}}
+                            </div>
+                        </details>
+                    {{/each}}
+                {{else}}
+                    <p class="beyonder-power-empty">No Beyonder Powers have been granted yet.</p>
+                {{/if}}
+            </section>
+        </div>
+        <div class="sheet-page" data-page="social" hidden></div>
+        <div class="sheet-page" data-page="inventory" hidden></div>
+
+    </div>
+</div>

@@ -1,0 +1,526 @@
+
+<form class="pathway-item-sheet" autocomplete="off">
+
+    {{!-- ==========================================
+         PATHWAY HEADER
+    =========================================== --}}
+
+    <header class="pathway-header">
+
+        {{!-- Pathway Image --}}
+        <button
+            type="button"
+            class="pathway-image-button"
+            data-action="pick-image"
+            title="Choose pathway image"
+            {{#unless editable}}disabled{{/unless}}>
+
+            <img
+                class="pathway-image-preview"
+                src="{{item.img}}"
+                alt="{{item.name}}">
+
+            <span class="pathway-image-overlay">Edit</span>
+        </button>
+
+        {{!-- Pathway Name --}}
+        <div class="pathway-title">
+            <label>Pathway Name</label>
+
+            <input
+                type="text"
+                value="{{item.name}}"
+                data-pathway-field="name"
+                {{#unless editable}}disabled{{/unless}}>
+        </div>
+
+        {{!-- Profile --}}
+        <div class="pathway-profile">
+            <label>Profile</label>
+
+            <select
+                data-pathway-field="profile"
+                {{#unless editable}}disabled{{/unless}}>
+
+                {{#each profiles as |profile|}}
+                    <option
+                        value="{{profile.value}}"
+                        {{#if profile.selected}}selected{{/if}}>
+                        {{profile.label}}
+                    </option>
+                {{/each}}
+
+            </select>
+        </div>
+
+        {{!-- GM Lock --}}
+        {{#if isGM}}
+            <button
+                type="button"
+                class="pathway-lock-toggle"
+                data-action="toggle-lock"
+                title="{{#if locked}}Unlock editing{{else}}Lock editing{{/if}}">
+
+                <img
+                    src="systems/Beyond/assets/icons/{{#if locked}}lock-closed{{else}}lock-open{{/if}}.svg"
+                    alt="{{#if locked}}Locked{{else}}Unlocked{{/if}}">
+            </button>
+        {{/if}}
+
+    </header>
+
+    <section class="pathway-authorities-editor">
+        <label for="pathway-authorities">Authorities</label>
+        <textarea id="pathway-authorities" rows="3" data-pathway-field="authorities" {{#unless editable}}disabled{{/unless}}>{{item.system.authorities}}</textarea>
+    </section>
+
+    {{!-- ==========================================
+         SEQUENCES
+    =========================================== --}}
+
+    <section class="pathway-sequences">
+
+        <h2>Sequences</h2>
+
+        {{#each sequences as |sequence|}}
+
+            <details
+                class="pathway-sequence"
+                data-sequence-index="{{sequence.index}}"
+                {{#if sequence.expanded}}open{{/if}}>
+
+                {{!-- Sequence Header --}}
+                <summary class="pathway-sequence-summary">
+
+                    <span class="pathway-sequence-number">
+                        Sequence {{sequence.number}}
+                    </span>
+
+                    <span class="pathway-sequence-name">
+                        {{#if sequence.name}}
+                            {{sequence.name}}
+                        {{else}}
+                            Unnamed Sequence
+                        {{/if}}
+                    </span>
+
+                    <span class="pathway-sequence-tier">
+                        {{sequence.tier}}
+                    </span>
+
+                </summary>
+
+
+                {{!-- Sequence Content --}}
+                <div class="pathway-sequence-content">
+
+                    {{!-- Sequence Name --}}
+                    <div class="pathway-sequence-details">
+
+                        <label>
+                            Sequence Name
+
+                            <input
+                                type="text"
+                                value="{{sequence.name}}"
+                                data-pathway-field="sequence"
+                                data-sequence-index="{{sequence.index}}"
+                                data-sequence-property="name"
+                                {{#unless ../editable}}disabled{{/unless}}>
+                        </label>
+
+                    </div>
+
+
+                    {{!-- ==================================
+                         ATTRIBUTE ADVANCEMENTS
+                    =================================== --}}
+
+                    <h4>Attribute Advancements</h4>
+
+                    <div class="pathway-advancements">
+
+                        {{!-- ==================================
+                             PHYSICAL
+                        =================================== --}}
+
+                        <div class="pathway-advancement-category">
+
+                            <h5>Physical</h5>
+
+                            {{!-- Strength --}}
+                            <div class="pathway-advancement-row">
+                                <span>Strength</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.physical.strength.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.physical.strength.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.physical.strength.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.physical.strength.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            {{!-- Dexterity --}}
+                            <div class="pathway-advancement-row">
+                                <span>Dexterity</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.physical.dexterity.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.physical.dexterity.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.physical.dexterity.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.physical.dexterity.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            {{!-- Stamina --}}
+                            <div class="pathway-advancement-row">
+                                <span>Stamina</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.physical.stamina.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.physical.stamina.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.physical.stamina.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.physical.stamina.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        {{!-- ==================================
+                             SOCIAL
+                        =================================== --}}
+
+                        <div class="pathway-advancement-category">
+
+                            <h5>Social</h5>
+
+                            {{!-- Presence --}}
+                            <div class="pathway-advancement-row">
+                                <span>Presence</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.social.presence.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.social.presence.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.social.presence.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.social.presence.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            {{!-- Manipulation --}}
+                            <div class="pathway-advancement-row">
+                                <span>Manipulation</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.social.manipulation.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.social.manipulation.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.social.manipulation.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.social.manipulation.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            {{!-- Appearance --}}
+                            <div class="pathway-advancement-row">
+                                <span>Appearance</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.social.appearance.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.social.appearance.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.social.appearance.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.social.appearance.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        {{!-- ==================================
+                             MENTAL
+                        =================================== --}}
+
+                        <div class="pathway-advancement-category">
+
+                            <h5>Mental</h5>
+
+                            {{!-- Perception --}}
+                            <div class="pathway-advancement-row">
+                                <span>Perception</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.mental.perception.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.mental.perception.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.mental.perception.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.mental.perception.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            {{!-- Intelligence --}}
+                            <div class="pathway-advancement-row">
+                                <span>Intelligence</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.mental.intelligence.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.mental.intelligence.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.mental.intelligence.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.mental.intelligence.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            {{!-- Wisdom --}}
+                            <div class="pathway-advancement-row">
+                                <span>Wisdom</span>
+
+                                <div class="pathway-advancement-values">
+
+                                    <label>
+                                        Levels
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="10"
+                                            step="1"
+                                            value="{{sequence.attributeAdvancements.mental.wisdom.levels}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.mental.wisdom.levels"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                    <label>
+                                        Ceiling
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                            placeholder="—"
+                                            value="{{sequence.attributeAdvancements.mental.wisdom.ceiling}}"
+                                            data-pathway-field="sequence"
+                                            data-sequence-index="{{sequence.index}}"
+                                            data-sequence-property="attributeAdvancements.mental.wisdom.ceiling"
+                                            {{#unless ../editable}}disabled{{/unless}}>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </details>
+
+        {{/each}}
+
+    </section>
+
+</form>

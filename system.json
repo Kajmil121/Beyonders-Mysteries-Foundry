@@ -1,0 +1,67 @@
+{
+    "id": "Beyond",
+    "title": "Beyonders & Mysteries",
+    "description": "A tabletop RPG system for Lord of the Mysteries based on World of Darkness",
+    "version": "1.0",
+    "manifest": "https://github.com/Kajmil121/Beyonders-Mysteries-Foundry/releases/latest/download/system.json",
+    "download": "https://github.com/Kajmil121/Beyonders-Mysteries-Foundry/releases/download/1.0.0/system.zip",
+    "type": "system",
+
+    "compatibility": {
+        "minimum": "14",
+        "verified": "14",
+        "maximum": "14"
+    },
+
+    "authors": [
+        {
+            "name": "Kajmil",
+            "url": "https://discord.gg/bjMBe835Mh",
+            "discord": "Kajmil121"
+        }
+    ],
+
+    "esmodules": [
+        "main.js"
+    ],
+
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
+
+    "styles": [
+        "styles/beyond.css"
+    ],
+
+    "grid": {
+        "distance": 1.5,
+        "units": "M"
+    },
+
+    
+
+    "packs": [
+        {
+            "name": "pathways",
+            "label": "Pathways",
+            "path": "./packs/pathways",
+            "type": "Item",
+            "system": "Beyond"
+        }
+    ],
+
+    "documentTypes": {
+        "Actor": {
+            "Beyonder": {},
+            "Antagonist": {}
+        },
+        "Item": {
+            "Pathway": {},
+            "BeyonderPower": {}
+        }
+    }
+}

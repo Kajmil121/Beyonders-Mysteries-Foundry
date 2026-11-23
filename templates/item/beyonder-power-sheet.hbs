@@ -1,0 +1,203 @@
+<form class="beyonder-power-editor" autocomplete="off">
+    <header class="beyonder-power-header">
+        <label>
+            Power Name
+            <input type="text" value="{{item.name}}" data-power-field="name" {{#unless editable}}disabled{{/unless}}>
+        </label>
+
+        <div class="beyonder-power-link-fields">
+            <label>
+                Pathway Name
+                <input type="text" value="{{system.pathwayName}}" data-power-field="pathwayName" placeholder="Must match the Pathway Item name" {{#unless editable}}disabled{{/unless}}>
+            </label>
+
+            <label>
+                Origin Sequence
+                <select data-power-field="sequence" {{#unless editable}}disabled{{/unless}}>
+                    {{#each sequenceOptions as |option|}}
+                        <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>Sequence {{option.value}}</option>
+                    {{/each}}
+                </select>
+            </label>
+        </div>
+    </header>
+
+    <label class="beyonder-power-description">
+        Description
+        <textarea rows="5" data-power-field="description" {{#unless editable}}disabled{{/unless}}>{{system.description}}</textarea>
+    </label>
+
+    <section class="beyonder-power-version">
+        <header class="beyonder-power-version-header">
+            <div>
+                <h3>Origin Version · Sequence {{system.sequence}}</h3>
+                <p>Choose the abilities that can use this power and set each modifier.</p>
+            </div>
+        </header>
+
+        {{#each baseAbilityGroups as |group|}}
+            <div class="beyonder-power-ability-group">
+                <h4>{{group.label}}</h4>
+                <div class="beyonder-power-ability-grid">
+                    {{#each group.options as |option|}}
+                        <div class="beyonder-power-ability-row {{#if option.selected}}selected{{/if}}">
+                            <label class="beyonder-power-ability-check">
+                                <input type="checkbox" data-power-field="abilityEnabled" data-power-version="base" data-power-ability="{{option.fieldKey}}" {{#if option.selected}}checked{{/if}} {{#unless @root.editable}}disabled{{/unless}}>
+                                <span class="beyonder-power-ability-checkbox"></span>
+                                <span class="beyonder-power-ability-name">{{option.label}}</span>
+                            </label>
+
+                            {{#if option.selected}}
+                                <label class="beyonder-power-ability-modifier">
+                                    <span>Modifier</span>
+                                    <input type="number" min="-100" max="100" step="1" value="{{option.modifier}}" data-power-field="abilityModifier" data-power-version="base" data-power-ability="{{option.fieldKey}}" {{#unless @root.editable}}disabled{{/unless}}>
+                                </label>
+                            {{/if}}
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        {{/each}}
+    </section>
+
+    <section class="beyonder-power-version beyonder-power-attribute-version">
+        <header class="beyonder-power-version-header">
+            <div>
+                <h3>Relevant Attributes</h3>
+                <p>Selected Attributes can use this power on their own rolls and when chosen for an Ability roll.</p>
+            </div>
+        </header>
+
+        <div class="beyonder-power-attribute-categories">
+            {{#each baseAttributeGroups as |group|}}
+                <div class="beyonder-power-ability-group">
+                    <h4>{{group.label}}</h4>
+                    <div class="beyonder-power-ability-grid">
+                        {{#each group.options as |option|}}
+                            <div class="beyonder-power-ability-row {{#if option.selected}}selected{{/if}}">
+                                <label class="beyonder-power-ability-check">
+                                    <input type="checkbox" data-power-field="attributeEnabled" data-power-version="base" data-power-ability="{{option.fieldKey}}" {{#if option.selected}}checked{{/if}} {{#unless @root.editable}}disabled{{/unless}}>
+                                    <span class="beyonder-power-ability-checkbox"></span>
+                                    <span class="beyonder-power-ability-name">{{option.label}}</span>
+                                </label>
+
+                                {{#if option.selected}}
+                                    <label class="beyonder-power-ability-modifier">
+                                        <span>Modifier</span>
+                                        <input type="number" min="-100" max="100" step="1" value="{{option.modifier}}" data-power-field="attributeModifier" data-power-version="base" data-power-ability="{{option.fieldKey}}" {{#unless @root.editable}}disabled{{/unless}}>
+                                    </label>
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="beyonder-power-upgrades">
+        <header class="beyonder-power-version-header">
+            <div>
+                <h3>Higher Sequence Variations</h3>
+                <p>Add a later version when this power or its modifiers improve.</p>
+            </div>
+
+            <button type="button" class="beyonder-power-add-upgrade" data-add-power-upgrade {{#unless editable}}disabled{{/unless}}>
+                <span aria-hidden="true">+</span> Add Variation
+            </button>
+        </header>
+
+        {{#if upgrades.length}}
+            <div class="beyonder-power-upgrade-list">
+                {{#each upgrades as |upgrade|}}
+                    <details class="beyonder-power-upgrade" open>
+                        <summary>
+                            <span>Sequence {{upgrade.sequence}} Variation</span>
+                            <span class="beyonder-power-upgrade-summary-action">Configure</span>
+                        </summary>
+
+                        <div class="beyonder-power-upgrade-content">
+                            <div class="beyonder-power-upgrade-controls">
+                                <label>
+                                    Unlock at
+                                    <select data-power-field="upgradeSequence" data-upgrade-index="{{upgrade.index}}" {{#unless @root.editable}}disabled{{/unless}}>
+                                        {{#each upgrade.sequenceOptions as |option|}}
+                                            <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>Sequence {{option.value}}</option>
+                                        {{/each}}
+                                    </select>
+                                </label>
+
+                                <button type="button" class="beyonder-power-remove-upgrade" data-remove-power-upgrade="{{upgrade.index}}" {{#unless @root.editable}}disabled{{/unless}}>
+                                    Remove Variation
+                                </button>
+                            </div>
+
+                            <p>This variation starts as a copy of the previous version. Change only the abilities, attributes or modifiers that improve.</p>
+
+                            {{#each upgrade.abilityGroups as |group|}}
+                                <div class="beyonder-power-ability-group">
+                                    <h4>{{group.label}}</h4>
+                                    <div class="beyonder-power-ability-grid">
+                                        {{#each group.options as |option|}}
+                                            <div class="beyonder-power-ability-row {{#if option.selected}}selected{{/if}}">
+                                                <label class="beyonder-power-ability-check">
+                                                    <input type="checkbox" data-power-field="abilityEnabled" data-power-version="{{option.versionKey}}" data-power-ability="{{option.fieldKey}}" {{#if option.selected}}checked{{/if}} {{#unless @root.editable}}disabled{{/unless}}>
+                                                    <span class="beyonder-power-ability-checkbox"></span>
+                                                    <span class="beyonder-power-ability-name">{{option.label}}</span>
+                                                </label>
+
+                                                {{#if option.selected}}
+                                                    <label class="beyonder-power-ability-modifier">
+                                                        <span>Modifier</span>
+                                                        <input type="number" min="-100" max="100" step="1" value="{{option.modifier}}" data-power-field="abilityModifier" data-power-version="{{option.versionKey}}" data-power-ability="{{option.fieldKey}}" {{#unless @root.editable}}disabled{{/unless}}>
+                                                    </label>
+                                                {{/if}}
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            {{/each}}
+
+                            <h4 class="beyonder-power-upgrade-subheading">Relevant Attributes</h4>
+                            <p>These Attributes apply to standalone Attribute rolls and Ability rolls using the selected Attribute.</p>
+
+                            <div class="beyonder-power-attribute-categories">
+                                {{#each upgrade.attributeGroups as |group|}}
+                                    <div class="beyonder-power-ability-group">
+                                        <h4>{{group.label}}</h4>
+                                        <div class="beyonder-power-ability-grid">
+                                            {{#each group.options as |option|}}
+                                                <div class="beyonder-power-ability-row {{#if option.selected}}selected{{/if}}">
+                                                    <label class="beyonder-power-ability-check">
+                                                        <input type="checkbox" data-power-field="attributeEnabled" data-power-version="{{option.versionKey}}" data-power-ability="{{option.fieldKey}}" {{#if option.selected}}checked{{/if}} {{#unless @root.editable}}disabled{{/unless}}>
+                                                        <span class="beyonder-power-ability-checkbox"></span>
+                                                        <span class="beyonder-power-ability-name">{{option.label}}</span>
+                                                    </label>
+
+                                                    {{#if option.selected}}
+                                                        <label class="beyonder-power-ability-modifier">
+                                                            <span>Modifier</span>
+                                                            <input type="number" min="-100" max="100" step="1" value="{{option.modifier}}" data-power-field="attributeModifier" data-power-version="{{option.versionKey}}" data-power-ability="{{option.fieldKey}}" {{#unless @root.editable}}disabled{{/unless}}>
+                                                        </label>
+                                                    {{/if}}
+                                                </div>
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </details>
+                {{/each}}
+            </div>
+        {{else}}
+            <p class="beyonder-power-no-upgrades">No higher-sequence variations configured.</p>
+        {{/if}}
+    </section>
+
+    <section class="beyonder-power-effects">
+        <h3>Effect Rolls</h3>
+        <p>place holder</p>
+        <textarea rows="6" data-power-field="effectRolls" placeholder="Premade effect roll details can be added here later." {{#unless editable}}disabled{{/unless}}>{{system.effectRolls}}</textarea>
+    </section>
+</form>
